@@ -1,10 +1,10 @@
-// Renders tools/placeholders.html scenes into assets/photos/*.jpg (+ profile.png)
-// Usage: node tools/render-placeholders.js
+// Renders tools/placeholders.html scenes into public/photos/*.jpg (+ profile.png)
+// Usage: node tools/render-placeholders.cjs
 const { chromium } = require('playwright');
 const fs = require('fs');
 const path = require('path');
 (async () => {
-  const out = path.join(__dirname, '..', 'assets', 'photos');
+  const out = path.join(__dirname, '..', 'public', 'photos');
   fs.mkdirSync(out, { recursive: true });
   const browser = await chromium.launch();
   const page = await browser.newPage();

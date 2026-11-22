@@ -1,5 +1,9 @@
 // Curved / S-bending WebGL ribbon gallery (Three.js)
-import * as THREE from '../vendor/three.module.min.js';
+import {
+  LinearFilter, Mesh, PerspectiveCamera, PlaneGeometry, Raycaster, SRGBColorSpace, Scene,
+  ShaderMaterial, TextureLoader, Vector2, WebGLRenderer, type Texture,
+} from 'three';
+import type { Photo } from './content';
 
 const vertex = /* glsl */`
   uniform float uViewW;
@@ -59,40 +63,57 @@ const fragment = /* glsl */`
   }
 `;
 
-export function initRibbon({ canvas, items, onActive, onOpen, onHover }) {
-  let renderer;
+export interface RibbonOptions {
+  canvas: HTMLCanvasElement;
+  items: Photo[];
+  onActive?: (index: number) => void;
+  onOpen?: (index: number) => void;
+  onHover?: (over: boolean) => void;
+}
+export interface Ribbon { setScroll(px: number): void; readonly total: number; start(): void; stop(): void }
+
+type Uniforms = {
+  uTex: { value: Texture | null }; uImgRes: { value: Vector2 }; uPlaneRes: { value: Vector2 };
+  uVelocity: { value: number }; uHover: { value: number }; uRadius: { value: number }; uLoaded: { value: number };
+  uViewW: { value: number }; uViewH: { value: number }; uBend: { value: number };
+};
+type Card = Mesh<PlaneGeometry, ShaderMaterial> & { userData: { index: number; hover: number } };
+
+export function initRibbon({ canvas, items, onActive, onOpen, onHover }: RibbonOptions): Ribbon | null {
+  let renderer: WebGLRenderer;
   try {
-    renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true, powerPreference: 'high-performance' });
-  } catch (e) {
+    renderer = new WebGLRenderer({ canvas, antialias: true, alpha: true, powerPreference: 'high-performance' });
+  } catch {
     return null;
   }
   renderer.setClearColor(0x000000, 0);
   renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
-  if ('outputColorSpace' in renderer) renderer.outputColorSpace = THREE.SRGBColorSpace;
+  renderer.outputColorSpace = SRGBColorSpace;
 
-  const scene = new THREE.Scene();
-  const camera = new THREE.PerspectiveCamera(45, 1, 10, 6000);
-  const loader = new THREE.TextureLoader();
-  const geometry = new THREE.PlaneGeometry(1, 1, 40, 20);
+  const scene = new Scene();
+  const camera = new PerspectiveCamera(45, 1, 10, 6000);
+  const loader = new TextureLoader();
+  const geometry = new PlaneGeometry(1, 1, 40, 20);
 
   let W = 1, H = 1, cardW = 400, cardH = 270, gap = 40, total = 1;
   const state = { target: 0, current: 0, scrollBase: 0, drag: 0, velocity: 0, active: -1, hovered: -1, running: false, bend: 1 };
 
-  const meshes = items.map((item, i) => {
-    const uniforms = {
-      uTex: { value: null }, uImgRes: { value: new THREE.Vector2(16, 10) }, uPlaneRes: { value: new THREE.Vector2(cardW, cardH) },
+  const meshes: Card[] = items.map((item, i) => {
+    const uniforms: Uniforms = {
+      uTex: { value: null }, uImgRes: { value: new Vector2(16, 10) }, uPlaneRes: { value: new Vector2(cardW, cardH) },
       uVelocity: { value: 0 }, uHover: { value: 0 }, uRadius: { value: 10 }, uLoaded: { value: 0 },
       uViewW: { value: 1 }, uViewH: { value: 1 }, uBend: { value: 1 },
     };
-    const material = new THREE.ShaderMaterial({ vertexShader: vertex, fragmentShader: fragment, uniforms, transparent: true });
-    const mesh = new THREE.Mesh(geometry, material);
+    const material = new ShaderMaterial({ vertexShader: vertex, fragmentShader: fragment, uniforms, transparent: true });
+    const mesh = new Mesh(geometry, material) as Card;
     mesh.userData = { index: i, hover: 0 };
     scene.add(mesh);
     loader.load(item.src, (tex) => {
-      if ('colorSpace' in tex) tex.colorSpace = THREE.SRGBColorSpace;
-      tex.minFilter = THREE.LinearFilter; tex.generateMipmaps = false;
+      tex.colorSpace = SRGBColorSpace;
+      tex.minFilter = LinearFilter; tex.generateMipmaps = false;
       uniforms.uTex.value = tex;
-      uniforms.uImgRes.value.set(tex.image.width, tex.image.height);
+      const img = tex.image as HTMLImageElement;
+      uniforms.uImgRes.value.set(img.width, img.height);
       uniforms.uLoaded.value = 1;
     });
     return mesh;
@@ -113,16 +134,16 @@ export function initRibbon({ canvas, items, onActive, onOpen, onHover }) {
     state.bend = W < 700 ? 0.45 : 1;
     meshes.forEach((m) => {
       m.scale.set(cardW, cardH, 1);
-      const u = m.material.uniforms;
+      const u = m.material.uniforms as Uniforms;
       u.uPlaneRes.value.set(cardW, cardH); u.uViewW.value = W; u.uViewH.value = H; u.uRadius.value = Math.max(6, cardW * 0.025);
     });
   }
 
   // ---- input: drag ----
-  const pointer = new THREE.Vector2(-10, -10);
-  const ray = new THREE.Raycaster();
-  let down = false, startX = 0, lastX = 0, moved = 0;
-  canvas.addEventListener('pointerdown', (e) => { down = true; startX = lastX = e.clientX; moved = 0; canvas.setPointerCapture?.(e.pointerId); });
+  const pointer = new Vector2(-10, -10);
+  const ray = new Raycaster();
+  let down = false, lastX = 0, moved = 0;
+  canvas.addEventListener('pointerdown', (e) => { down = true; lastX = e.clientX; moved = 0; canvas.setPointerCapture?.(e.pointerId); });
   canvas.addEventListener('pointermove', (e) => {
     const r = canvas.getBoundingClientRect();
     pointer.set(((e.clientX - r.left) / r.width) * 2 - 1, -((e.clientY - r.top) / r.height) * 2 + 1);
@@ -130,14 +151,14 @@ export function initRibbon({ canvas, items, onActive, onOpen, onHover }) {
     const dx = e.clientX - lastX; lastX = e.clientX; moved += Math.abs(dx);
     state.drag -= dx * 1.4;
   });
-  function pick(e) {
+  function pick(e: PointerEvent): number {
     const r = canvas.getBoundingClientRect();
-    const p = new THREE.Vector2(((e.clientX - r.left) / r.width) * 2 - 1, -((e.clientY - r.top) / r.height) * 2 + 1);
+    const p = new Vector2(((e.clientX - r.left) / r.width) * 2 - 1, -((e.clientY - r.top) / r.height) * 2 + 1);
     ray.setFromCamera(p, camera);
     const hit = ray.intersectObjects(meshes, false)[0];
-    return hit ? hit.object.userData.index : -1;
+    return hit ? (hit.object as Card).userData.index : -1;
   }
-  const end = (e) => {
+  const end = (e: PointerEvent) => {
     if (!down) return; down = false;
     if (moved < 6) { const i = pick(e); if (i >= 0) onOpen?.(i); }
   };
@@ -145,7 +166,7 @@ export function initRibbon({ canvas, items, onActive, onOpen, onHover }) {
   canvas.addEventListener('pointercancel', () => { down = false; });
   canvas.addEventListener('pointerleave', () => { pointer.set(-10, -10); });
 
-  function wrap(x) { return ((x + total / 2) % total + total) % total - total / 2; }
+  function wrap(x: number) { return ((x + total / 2) % total + total) % total - total / 2; }
 
   function frame() {
     if (!state.running) return;
@@ -159,7 +180,7 @@ export function initRibbon({ canvas, items, onActive, onOpen, onHover }) {
     meshes.forEach((m, i) => {
       const x = wrap(i * (cardW + gap) - state.current);
       m.position.set(x, 0, 0);
-      const u = m.material.uniforms;
+      const u = m.material.uniforms as Uniforms;
       u.uVelocity.value = state.velocity; u.uBend.value = state.bend;
       if (Math.abs(x) < bestD) { bestD = Math.abs(x); best = i; }
     });
@@ -167,7 +188,7 @@ export function initRibbon({ canvas, items, onActive, onOpen, onHover }) {
     // hover (raycast against the flat planes – accurate near the centre)
     ray.setFromCamera(pointer, camera);
     const hit = ray.intersectObjects(meshes, false)[0];
-    const h = hit ? hit.object.userData.index : -1;
+    const h: number = hit ? (hit.object as Card).userData.index : -1;
     if (h !== state.hovered) { state.hovered = h; onHover?.(h >= 0); }
     meshes.forEach((m, i) => { m.userData.hover += ((i === h ? 1 : 0) - m.userData.hover) * 0.1; m.material.uniforms.uHover.value = m.userData.hover; });
 
@@ -180,7 +201,7 @@ export function initRibbon({ canvas, items, onActive, onOpen, onHover }) {
   window.addEventListener('resize', resize);
 
   return {
-    setScroll(px) { state.scrollBase = px; },
+    setScroll(px: number) { state.scrollBase = px; },
     get total() { return total; },
     start() { if (!state.running) { state.running = true; requestAnimationFrame(frame); } },
     stop() { state.running = false; },

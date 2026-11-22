@@ -1,14 +1,19 @@
 // Monochrome "swirling night sky" flow-field background with a
 // photographer silhouette on a hill. Static streamlines + live particles.
 
-function mulberry(a) { return () => { a |= 0; a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+function mulberry(a: number): () => number { return () => { a |= 0; a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
 
-export function initSwirl(bg, fx) {
-  const bctx = bg.getContext('2d');
-  const fctx = fx.getContext('2d');
-  let W = 0, H = 0, dpr = 1, vortices = [], particles = [], running = false, raf = 0;
+interface Vortex { x: number; y: number; r: number; s: number; moon?: boolean }
+interface Particle { x: number; y: number; life: number }
+export interface Swirl { start(): void; stop(): void }
 
-  function field(x, y) {
+export function initSwirl(bg: HTMLCanvasElement, fx: HTMLCanvasElement): Swirl {
+  const bctx = bg.getContext('2d')!;
+  const fctx = fx.getContext('2d')!;
+  let W = 0, H = 0, dpr = 1, running = false, raf = 0;
+  let vortices: Vortex[] = [], particles: Particle[] = [];
+
+  function field(x: number, y: number): [number, number] {
     // base flow: wavy, mostly horizontal
     const nx = x / W, ny = y / H;
     let vx = 1, vy = 0.45 * Math.sin((nx * 1.6 + ny * 1.1) * Math.PI * 2) + 0.25 * Math.sin(nx * 9 + ny * 3);
@@ -21,7 +26,7 @@ export function initSwirl(bg, fx) {
     const m = Math.hypot(vx, vy) || 1; return [vx / m, vy / m];
   }
 
-  function drawGround(ctx) {
+  function drawGround(ctx: CanvasRenderingContext2D) {
     ctx.save(); ctx.fillStyle = '#020202';
     // far hills
     ctx.globalAlpha = 0.85; ctx.beginPath(); ctx.moveTo(0, H);
@@ -127,7 +132,7 @@ export function initSwirl(bg, fx) {
   }
 
   render();
-  let rt; window.addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(render, 200); });
+  let rt = 0; window.addEventListener('resize', () => { clearTimeout(rt); rt = window.setTimeout(render, 200); });
   return {
     start() { if (!running) { running = true; raf = requestAnimationFrame(tick); } },
     stop() { running = false; cancelAnimationFrame(raf); },
