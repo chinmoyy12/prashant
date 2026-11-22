@@ -35,13 +35,34 @@ npm run preview    # serve the production build → http://localhost:4173
 
 The `dist/` folder also works on Netlify, Vercel or Cloudflare Pages (build command `npm run build`, output `dist`).
 
+## Admin panel (Prasant Studio)
+Open **/admin/** on the Netlify site (e.g. `https://prasant-shil-sarma.netlify.app/admin/`) and sign in.
+
+- **Collections / Pujo Nights ring:** add photos (button or drag & drop), replace, remove, reorder (drag or ← →), edit titles and subtitles.
+- **Featured / Journey:** replace the photo in each slot. An empty Journey chapter shows its big number.
+- **Framing:** click any photo and choose the point that must stay in view; previews show how it is cropped.
+- **Words:** the home-screen line and the About text.
+- Press **Publish**. The website reads its content from the API on every visit, so changes are live immediately — no rebuild.
+- Each photo can be used only once (checked in the admin *and* on the server). Uploads are resized in the browser (2000/1100/560 px, WebP or JPEG), so camera/GPS metadata never leaves the device.
+- Change the password from the ••• menu. Repeated wrong passwords lock sign-in for 15 minutes.
+
+### How it works
+- `netlify/functions/` — `content` (GET/PUT site content), `auth` (login, session, password), `photos` (upload, serve images). Data lives in **Netlify Blobs**; the previous published version is kept as a backup.
+- Credentials are Netlify environment variables, never in the repo: `ADMIN_EMAIL`, `ADMIN_PASSWORD_HASH` (generate with `node scripts/hash-password.mjs 'password'`), `SESSION_SECRET` (any long random string).
+- `src/data/default-content.json` is the built-in content, used until something is published and as a fallback if the API is unreachable.
+- The GitHub Pages copy is built with `VITE_API_BASE=https://prasant-shil-sarma.netlify.app`, so it shows the same live content; its `/admin/` forwards to Netlify.
+
+### Deploy
+```bash
+npm run build
+NETLIFY_AUTH_TOKEN=<token> npx netlify deploy --prod --site prasant-shil-sarma --dir dist --functions netlify/functions --no-build
+```
+Local end-to-end test (site + functions + Blobs emulator): `npm run build && node scripts/local-server.mjs` → http://localhost:8888 (put the three variables in a git-ignored `.env`).
+
 ## Photos
-- `public/photos/work/` holds Prasant's photos (2000px), with `public/photos/work/sm/` (1000px) used in the 3D galleries. Location and camera metadata were stripped.
-- To add or change gallery photos, drop both sizes in those folders and edit `src/content.ts`. Journey, Featured and About images are set in `index.html`.
-- The **Nature** chapter shows a big chapter number until a nature photo is added. Swap its `<div class="jpanel__num">` for a `<figure class="jpanel__photo">` like the other chapters.
-- **Each photo may appear only once.** `npm run check` (also run before every build) fails if a photo repeats or a file is missing.
-- `focus` in `src/content.ts` sets which part of a photo stays in frame when it's cropped into a card.
-- `public/photos/prasant/hero.webp` + `hero-depth.png` drive the 3D hero portrait (cut-out + depth map). `about.jpg` is the spotlight portrait.
+- Built-in photos live in `public/photos/work/` as `<name>-full|md|sm.webp`; their titles, order and framing are in `src/data/default-content.json`. Day-to-day changes are easier in the admin panel.
+- `npm run check` (also run before every build) fails if a built-in photo repeats or a file is missing.
+- `public/photos/prasant/hero.webp` + `hero-depth.png` drive the 3D hero portrait; `about.jpg` is the spotlight portrait.
 
 ## Project layout
 ```
@@ -50,7 +71,9 @@ src/main.ts           all scroll animations and interactions
 src/gallery3d.ts      WebGL curved ribbon (Three.js + shaders)
 src/hero3d.ts         3D portrait: depth mesh, relighting, colour reveal, particles
 src/swirl.ts          swirling night-sky canvas
-src/content.ts        gallery photos and titles  ← edit this
+src/content.ts        loads live content from the API (falls back to src/data/default-content.json)
+src/admin/            admin panel (Prasant Studio)
+netlify/functions/    API: content, login, uploads
 src/styles.css        styles
 public/photos/        images
 ```

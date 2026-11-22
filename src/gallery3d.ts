@@ -1,9 +1,9 @@
 // Curved / S-bending WebGL ribbon gallery (Three.js)
 import {
   LinearFilter, Mesh, PerspectiveCamera, PlaneGeometry, Raycaster, SRGBColorSpace, Scene,
-  ShaderMaterial, TextureLoader, Vector2, WebGLRenderer, type Texture,
+  ShaderMaterial, Color, ImageBitmapLoader, Texture, TextureLoader, Vector2, Vector3, WebGLRenderer,
 } from 'three';
-import type { Photo } from './content';
+import { resolveUrl, type PhotoItem } from './content';
 
 const vertex = /* glsl */`
   uniform float uViewW;
@@ -37,6 +37,7 @@ const fragment = /* glsl */`
   uniform float uHover;
   uniform float uRadius;
   uniform float uLoaded;
+  uniform vec3 uPlaceholder;
   uniform vec2 uFocus;
   varying vec2 vUv;
   varying float vShade;
@@ -54,29 +55,30 @@ const fragment = /* glsl */`
     col.r = texture2D(uTex, uv + vec2(shift, 0.0)).r;
     col.g = texture2D(uTex, uv).g;
     col.b = texture2D(uTex, uv - vec2(shift, 0.0)).b;
-    col = mix(vec3(0.82), col, uLoaded) * vShade;
+    col = mix(uPlaceholder, col, uLoaded) * vShade;
     // rounded corners
     vec2 p = (vUv - 0.5) * uPlaneRes;
     vec2 q = abs(p) - uPlaneRes * 0.5 + uRadius;
     float d = length(max(q, 0.0)) + min(max(q.x, q.y), 0.0) - uRadius;
     float a = 1.0 - smoothstep(-1.0, 1.0, d);
     gl_FragColor = vec4(col, a);
+    #include <colorspace_fragment>
   }
 `;
 
 export interface RibbonOptions {
   canvas: HTMLCanvasElement;
-  items: Photo[];
+  items: PhotoItem[];
   onActive?: (index: number) => void;
   onOpen?: (index: number) => void;
   onHover?: (over: boolean) => void;
 }
-export interface Ribbon { setScroll(px: number): void; readonly total: number; start(): void; stop(): void }
+export interface Ribbon { setScroll(px: number): void; loadTextures(): void; readonly total: number; start(): void; stop(): void }
 
 type Uniforms = {
   uTex: { value: Texture | null }; uImgRes: { value: Vector2 }; uPlaneRes: { value: Vector2 };
   uVelocity: { value: number }; uHover: { value: number }; uRadius: { value: number }; uLoaded: { value: number };
-  uViewW: { value: number }; uViewH: { value: number }; uBend: { value: number }; uFocus: { value: Vector2 };
+  uViewW: { value: number }; uViewH: { value: number }; uBend: { value: number }; uFocus: { value: Vector2 }; uPlaceholder: { value: Vector3 };
 };
 type Card = Mesh<PlaneGeometry, ShaderMaterial> & { userData: { index: number; hover: number } };
 
@@ -93,7 +95,11 @@ export function initRibbon({ canvas, items, onActive, onOpen, onHover }: RibbonO
 
   const scene = new Scene();
   const camera = new PerspectiveCamera(45, 1, 10, 6000);
-  const loader = new TextureLoader();
+  // decode images off the main thread where supported (no scroll jank while textures arrive)
+  const useBitmaps = typeof createImageBitmap === 'function' && !/^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+  const bitmapLoader = new ImageBitmapLoader().setCrossOrigin('anonymous');
+  bitmapLoader.setOptions({ imageOrientation: 'flipY', premultiplyAlpha: 'none' });
+  const imageLoader = new TextureLoader().setCrossOrigin('anonymous');
   const geometry = new PlaneGeometry(1, 1, 40, 20);
 
   let W = 1, H = 1, cardW = 400, cardH = 270, gap = 40, total = 1;
@@ -104,22 +110,54 @@ export function initRibbon({ canvas, items, onActive, onOpen, onHover }: RibbonO
       uTex: { value: null }, uImgRes: { value: new Vector2(16, 10) }, uPlaneRes: { value: new Vector2(cardW, cardH) },
       uVelocity: { value: 0 }, uHover: { value: 0 }, uRadius: { value: 10 }, uLoaded: { value: 0 },
       uViewW: { value: 1 }, uViewH: { value: 1 }, uBend: { value: 1 },
-      uFocus: { value: new Vector2(item.focus?.[0] ?? 0.5, 1 - (item.focus?.[1] ?? 0.5)) },
+      uFocus: { value: new Vector2(item.img.focus[0], 1 - item.img.focus[1]) },
+      uPlaceholder: { value: (() => { const c = new Color(item.img.color); c.convertSRGBToLinear(); return new Vector3(c.r, c.g, c.b).multiplyScalar(1); })() },
     };
+    uniforms.uImgRes.value.set(item.img.w, item.img.h);
     const material = new ShaderMaterial({ vertexShader: vertex, fragmentShader: fragment, uniforms, transparent: true });
     const mesh = new Mesh(geometry, material) as Card;
     mesh.userData = { index: i, hover: 0 };
     scene.add(mesh);
-    loader.load(item.thumb, (tex) => {
-      tex.colorSpace = SRGBColorSpace;
-      tex.minFilter = LinearFilter; tex.generateMipmaps = false;
-      uniforms.uTex.value = tex;
-      const img = tex.image as HTMLImageElement;
-      uniforms.uImgRes.value.set(img.width, img.height);
-      uniforms.uLoaded.value = 1;
-    });
     return mesh;
   });
+
+  // ---- textures load lazily, nearest-to-centre first, a few at a time ----
+  const loaded = new Set<number>();
+  const pending = new Set<number>();
+  const fade: number[] = items.map(() => 0);
+  let texturesWanted = false;
+  function applyTexture(i: number, tex: Texture) {
+    tex.colorSpace = SRGBColorSpace;
+    tex.minFilter = LinearFilter; tex.generateMipmaps = false;
+    tex.needsUpdate = true;
+    meshes[i].material.uniforms.uTex.value = tex;
+    loaded.add(i); pending.delete(i);
+    pump();
+  }
+  function loadOne(i: number) {
+    pending.add(i);
+    const url = resolveUrl(window.innerWidth < 700 ? items[i].img.sm : items[i].img.md);
+    const fail = () => { pending.delete(i); loaded.add(i); pump(); };
+    if (useBitmaps) {
+      bitmapLoader.load(url, (bmp) => { const t = new Texture(bmp as unknown as HTMLImageElement); t.flipY = false; applyTexture(i, t); }, undefined, fail);
+    } else {
+      imageLoader.load(url, (t) => applyTexture(i, t), undefined, fail);
+    }
+  }
+  function pump() {
+    if (!texturesWanted) return;
+    const n = items.length;
+    const centre = Math.max(0, state.active);
+    const order = [...Array(n).keys()].sort((a, b) => {
+      const da = Math.min(Math.abs(a - centre), n - Math.abs(a - centre));
+      const db = Math.min(Math.abs(b - centre), n - Math.abs(b - centre));
+      return da - db;
+    });
+    for (const i of order) {
+      if (pending.size >= 4) break;
+      if (!loaded.has(i) && !pending.has(i)) loadOne(i);
+    }
+  }
 
   function resize() {
     const r = canvas.getBoundingClientRect();
@@ -196,7 +234,10 @@ export function initRibbon({ canvas, items, onActive, onOpen, onHover }: RibbonO
     if (h !== state.hovered) { state.hovered = h; onHover?.(h >= 0); }
     meshes.forEach((m, i) => { m.userData.hover += ((i === h ? 1 : 0) - m.userData.hover) * 0.1; m.material.uniforms.uHover.value = m.userData.hover; });
 
-    if (best !== state.active) { state.active = best; onActive?.(best); }
+    meshes.forEach((m, i) => {
+      if (loaded.has(i) && fade[i] < 1) { fade[i] = Math.min(1, fade[i] + 0.06); m.material.uniforms.uLoaded.value = m.material.uniforms.uTex.value ? fade[i] : 0; }
+    });
+    if (best !== state.active) { state.active = best; onActive?.(best); pump(); }
     renderer.render(scene, camera);
     requestAnimationFrame(frame);
   }
@@ -206,6 +247,7 @@ export function initRibbon({ canvas, items, onActive, onOpen, onHover }: RibbonO
 
   return {
     setScroll(px: number) { state.scrollBase = px; },
+    loadTextures() { if (!texturesWanted) { texturesWanted = true; pump(); } },
     get total() { return total; },
     start() { if (!state.running) { state.running = true; requestAnimationFrame(frame); } },
     stop() { state.running = false; },

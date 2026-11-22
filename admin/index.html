@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>Prasant Studio</title>
+  <meta name="theme-color" content="#0b0b0c" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230b0b0c'/%3E%3Ccircle cx='32' cy='32' r='13' fill='none' stroke='%23fff' stroke-width='4'/%3E%3Ccircle cx='32' cy='32' r='4' fill='%23fff'/%3E%3C/svg%3E" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <!-- ============ SIGN IN ============ -->
+  <main class="login" id="loginView" hidden>
+    <form class="login__card" id="loginForm" novalidate>
+      <p class="eyebrow">PRASANT · STUDIO</p>
+      <h1>Sign in</h1>
+      <p class="muted">Manage the photos and words on your portfolio.</p>
+      <label for="loginEmail">Email</label>
+      <input id="loginEmail" name="email" type="email" autocomplete="username" required />
+      <label for="loginPassword">Password</label>
+      <div class="pw">
+        <input id="loginPassword" name="password" type="password" autocomplete="current-password" required />
+        <button type="button" class="pw__toggle" id="pwToggle" aria-label="Show password">Show</button>
+      </div>
+      <p class="form-error" id="loginError" role="alert"></p>
+      <button class="btn btn--primary btn--block" id="loginBtn" type="submit">Sign in</button>
+      <a class="login__back" href="../">← Back to the website</a>
+    </form>
+  </main>
+
+  <!-- ============ STUDIO ============ -->
+  <div class="app" id="appView" hidden>
+    <header class="bar">
+      <div class="bar__brand">PRASANT<i></i><span>Studio</span></div>
+      <div class="bar__status" id="status" data-state="saved"><span class="dot"></span><span id="statusText">All changes are live</span></div>
+      <div class="bar__actions">
+        <a class="btn btn--ghost" href="../" target="_blank" rel="noopener">View site ↗</a>
+        <button class="btn btn--ghost" id="discardBtn" disabled>Discard changes</button>
+        <button class="btn btn--primary" id="publishBtn" disabled>Publish</button>
+        <div class="menu">
+          <button class="btn btn--icon" id="menuBtn" aria-haspopup="true" aria-expanded="false" aria-label="Account menu">•••</button>
+          <div class="menu__list" id="menuList" hidden>
+            <button id="pwBtn">Change password</button>
+            <button id="logoutBtn">Sign out</button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <nav class="tabs" id="tabs" role="tablist">
+      <button role="tab" data-tab="collections" aria-selected="true">Collections <span class="count" id="countCollections"></span></button>
+      <button role="tab" data-tab="frames" aria-selected="false">Pujo Nights ring <span class="count" id="countFrames"></span></button>
+      <button role="tab" data-tab="featured" aria-selected="false">Featured</button>
+      <button role="tab" data-tab="journey" aria-selected="false">Journey</button>
+      <button role="tab" data-tab="text" aria-selected="false">Words</button>
+    </nav>
+
+    <section class="panel" id="panel"></section>
+
+    <p class="foot muted">Changes appear on the website as soon as you press <b>Publish</b>. Each photo can be used only once.</p>
+  </div>
+
+  <!-- ============ FRAMING EDITOR ============ -->
+  <div class="modal" id="focusModal" hidden>
+    <div class="modal__box modal__box--wide" role="dialog" aria-labelledby="focusTitle">
+      <div class="modal__head">
+        <h2 id="focusTitle">Adjust framing</h2>
+        <button class="btn btn--icon" data-close aria-label="Close">✕</button>
+      </div>
+      <p class="muted">Click or drag on the photo to choose the point that must always stay in view. The previews show how the photo is cropped on the site.</p>
+      <div class="focus">
+        <div class="focus__stage" id="focusStage"><img id="focusImg" alt="" /><span class="focus__dot" id="focusDot"></span></div>
+        <div class="focus__previews">
+          <figure><div class="crop crop--tall"><img alt="" /></div><figcaption>Gallery card</figcaption></figure>
+          <figure><div class="crop crop--wide"><img alt="" /></div><figcaption>Wide card</figcaption></figure>
+          <figure><div class="crop crop--square"><img alt="" /></div><figcaption>Square</figcaption></figure>
+        </div>
+      </div>
+      <div class="modal__foot">
+        <button class="btn btn--ghost" id="focusReset">Centre</button>
+        <button class="btn btn--primary" id="focusSave">Use this framing</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ CHANGE PASSWORD ============ -->
+  <div class="modal" id="pwModal" hidden>
+    <form class="modal__box" id="pwForm" novalidate role="dialog" aria-labelledby="pwTitle">
+      <div class="modal__head">
+        <h2 id="pwTitle">Change password</h2>
+        <button type="button" class="btn btn--icon" data-close aria-label="Close">✕</button>
+      </div>
+      <label for="pwCurrent">Current password</label>
+      <input id="pwCurrent" type="password" autocomplete="current-password" required />
+      <label for="pwNext">New password <span class="muted">(at least 8 characters)</span></label>
+      <input id="pwNext" type="password" autocomplete="new-password" minlength="8" required />
+      <p class="form-error" id="pwError" role="alert"></p>
+      <div class="modal__foot"><button class="btn btn--primary" type="submit" id="pwSave">Change password</button></div>
+    </form>
+  </div>
+
+  <div class="toasts" id="toasts" aria-live="polite"></div>
+  <input type="file" id="fileInput" accept="image/jpeg,image/png,image/webp" hidden />
+
+  <script type="module" src="/src/admin/main.ts"></script>
+</body>
+</html>

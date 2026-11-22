@@ -6,7 +6,8 @@ export default defineConfig({
   server: { port: 5173, host: true },
   preview: { port: 4173, host: true },
   build: {
-    target: 'es2020',
+    rollupOptions: { input: { main: 'index.html', admin: 'admin/index.html' } },
+    target: 'es2022', // top-level await for loading live content
     assetsInlineLimit: 0,
     // three.js is lazy-loaded only when the Collections gallery is reached
     chunkSizeWarningLimit: 700,

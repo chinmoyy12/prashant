@@ -4,7 +4,7 @@ import { SplitText } from 'gsap/SplitText';
 import Lenis from 'lenis';
 import 'lenis/dist/lenis.css';
 import './styles.css';
-import { COLLECTIONS, FRAMES, type Photo } from './content';
+import { esc, imgTag, loadContent, objectPosition, resolveUrl, type PhotoItem } from './content';
 import { initSwirl } from './swirl';
 import type { Ribbon } from './gallery3d';
 import type { Hero3D } from './hero3d';
@@ -24,6 +24,39 @@ const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const pad = (n: number) => String(n).padStart(2, '0');
 const visibility = (el: Element, on: () => void, off: () => void) =>
   new IntersectionObserver(([en]) => (en.isIntersecting ? on() : off()), { rootMargin: '100px' }).observe(el);
+
+/* =========================================================
+   Live content (published from the admin panel)
+   ========================================================= */
+const content = await loadContent();
+const COLLECTIONS = content.collections;
+const FRAMES = content.frames;
+
+type Shot = { src: string; preview: string; title: string };
+const toShot = (it: PhotoItem): Shot => ({ src: resolveUrl(it.img.src), preview: resolveUrl(it.img.md), title: it.title });
+const lightboxAttrs = (it: PhotoItem) => `data-lightbox="${resolveUrl(it.img.src)}" data-preview="${resolveUrl(it.img.md)}" data-title="${esc(it.title)}"`;
+
+function renderContent() {
+  const heroLead = document.getElementById('heroLead');
+  if (heroLead) heroLead.textContent = content.text.heroLead;
+  const aboutBody = document.getElementById('aboutBody');
+  if (aboutBody) aboutBody.textContent = content.text.aboutBody;
+  document.querySelectorAll<HTMLElement>('.jpanel__media').forEach((slot) => {
+    const it = content.journey[slot.dataset.slot as keyof typeof content.journey];
+    slot.outerHTML = it
+      ? `<figure class="jpanel__photo" ${lightboxAttrs(it)}>${imgTag(it.img, it.title, '(max-width: 860px) 86vw, 32vw')}</figure>`
+      : `<div class="jpanel__num" aria-hidden="true">${slot.dataset.num ?? ''}</div>`;
+  });
+  document.querySelectorAll<HTMLElement>('[data-featured]').forEach((fig) => {
+    const it = content.featured[Number(fig.dataset.featured)];
+    if (!it) { fig.remove(); return; }
+    fig.setAttribute('data-lightbox', resolveUrl(it.img.src));
+    fig.setAttribute('data-preview', resolveUrl(it.img.md));
+    fig.setAttribute('data-title', it.title);
+    fig.innerHTML = `${imgTag(it.img, it.title, fig.classList.contains('fcard--b') ? '(max-width: 760px) 70vw, 34vw' : '(max-width: 760px) 40vw, 16vw')}<figcaption>${esc(it.title)}</figcaption>`;
+  });
+}
+renderContent();
 
 if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
 window.scrollTo(0, 0);
@@ -380,7 +413,7 @@ function setRibbonCaption(i: number) {
 }
 function buildRibbonFallback() {
   const fb = $('#ribbonFallback');
-  fb.innerHTML = COLLECTIONS.map((c) => `<figure data-lightbox="${c.src}" data-title="${c.title}"><img src="${c.thumb}" alt="${c.title}" loading="lazy"${objPos(c)} /></figure>`).join('');
+  fb.innerHTML = COLLECTIONS.map((c) => `<figure ${lightboxAttrs(c)}>${imgTag(c.img, c.title, '(max-width: 600px) 70vw, 420px')}</figure>`).join('');
   fb.hidden = false;
   $<HTMLCanvasElement>('#ribbon').hidden = true;
   setRibbonCaption(0);
@@ -400,7 +433,7 @@ async function setupRibbon() {
       canvas: $<HTMLCanvasElement>('#ribbon'),
       items: COLLECTIONS,
       onActive: setRibbonCaption,
-      onOpen: (i) => openLightbox(COLLECTIONS, i),
+      onOpen: (i) => openLightbox(COLLECTIONS.map(toShot), i),
       onHover: (over) => setCursorLabel(over ? 'VIEW' : 'DRAG'),
     });
   } catch (err) {
@@ -410,6 +443,8 @@ async function setupRibbon() {
   if (!ribbon) { buildRibbonFallback(); return; }
   const r = ribbon;
   r.setScroll(ribbonST.progress * r.total * RIBBON_SPAN);
+  // start downloading textures once the gallery is ~1.5 screens away
+  new IntersectionObserver(([e]) => { if (e.isIntersecting) r.loadTextures(); }, { rootMargin: '150% 0px' }).observe($('.collections__pin'));
   visibility($('.collections__pin'), () => r.start(), () => r.stop());
   const canvas = $('#ribbon');
   canvas.addEventListener('pointerenter', () => setCursorLabel('DRAG'));
@@ -425,9 +460,9 @@ const ring = $('#framesRing');
 const list = $('#framesList');
 const N = FRAMES.length;
 const STEP = 360 / N;
-const objPos = (f: Photo) => (f.focus ? ` style="object-position:${f.focus[0] * 100}% ${f.focus[1] * 100}%"` : '');
-ring.innerHTML = FRAMES.map((f, i) => `<div class="frame-card" data-i="${i}"><img src="${f.thumb}" alt="${f.title}" loading="lazy" draggable="false"${objPos(f)} /><span>${f.title}</span></div>`).join('');
-list.innerHTML = FRAMES.map((f, i) => `<li data-i="${i}">${f.title}</li>`).join('');
+ring.innerHTML = FRAMES.map((f, i) => `<div class="frame-card" data-i="${i}">${imgTag(f.img, f.title, '(max-width: 760px) 50vw, 240px', ' draggable="false"')}<span>${esc(f.title)}</span></div>`).join('');
+list.innerHTML = FRAMES.map((f, i) => `<li data-i="${i}">${esc(f.title)}</li>`).join('');
+void objectPosition;
 const cards = $$('.frame-card', ring);
 const listItems = $$('li', list);
 const ringState = { tilt: 62, spin: 0, scale: 0.82, R: 200 };
@@ -502,7 +537,7 @@ framesPin.addEventListener('pointerenter', () => setCursorLabel('DRAG'));
 framesPin.addEventListener('pointerleave', () => setCursorLabel(''));
 cards.forEach((c) => c.addEventListener('click', () => {
   if (ringDragged) return;
-  openLightbox(FRAMES, Number(c.dataset.i));
+  openLightbox(FRAMES.map(toShot), Number(c.dataset.i));
 }));
 
 /* =========================================================
@@ -550,7 +585,6 @@ const lbImg = $<HTMLImageElement>('#lightboxImg');
 const lbCap = $('#lightboxCap');
 const lbCount = $('#lightboxCount');
 const modal = $('#contactModal');
-type Shot = Pick<Photo, 'src' | 'title'>;
 let lbSet: Shot[] = [];
 let lbIndex = 0;
 function showShot(dir = 0) {
@@ -558,10 +592,16 @@ function showShot(dir = 0) {
   lbCap.textContent = shot.title;
   lbCount.textContent = lbSet.length > 1 ? `${pad(lbIndex + 1)} / ${pad(lbSet.length)}` : '';
   gsap.fromTo(lbImg, { opacity: 0, x: dir * 40 }, { opacity: 1, x: 0, duration: 0.5, ease: 'power3.out' });
-  lbImg.src = shot.src;
+  // show the (usually cached) medium image instantly, then swap in the full-size one
+  const want = lbIndex;
+  lbImg.src = shot.preview;
   lbImg.alt = shot.title;
+  const full = new Image();
+  full.decoding = 'async';
+  full.onload = () => { if (lbIndex === want && lb.classList.contains('is-open')) lbImg.src = shot.src; };
+  full.src = shot.src;
   // warm the cache for the neighbours
-  [1, -1].forEach((d) => { const n = lbSet[(lbIndex + d + lbSet.length) % lbSet.length]; if (n) new Image().src = n.src; });
+  [1, -1].forEach((d) => { const n = lbSet[(lbIndex + d + lbSet.length) % lbSet.length]; if (n) new Image().src = n.preview; });
 }
 function openLightbox(set: Shot[], index: number) {
   lbSet = set; lbIndex = index;
@@ -596,7 +636,7 @@ document.addEventListener('click', (e) => {
   if (!el?.dataset.lightbox) return;
   // browse every photo in the same section
   const group = $$('[data-lightbox]', el.closest('section') ?? document);
-  openLightbox(group.map((g) => ({ src: g.dataset.lightbox ?? '', title: g.dataset.title ?? '' })), Math.max(0, group.indexOf(el)));
+  openLightbox(group.map((g) => ({ src: g.dataset.lightbox ?? '', preview: g.dataset.preview ?? g.dataset.lightbox ?? '', title: g.dataset.title ?? '' })), Math.max(0, group.indexOf(el)));
 });
 
 /* =========================================================

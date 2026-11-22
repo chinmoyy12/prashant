@@ -1,0 +1,706 @@
+{
+ "version": 1,
+ "updatedAt": "1970-01-01T00:00:00.000Z",
+ "text": {
+  "heroLead": "I try to find a story behind every frame — because every frame is unique.",
+  "aboutBody": "I'm Prasant Shil Sarma — a photographer who is still learning, because I believe learning never stops in photography. I chase stories on the street, in faces, in faded vintage tones, in quiet nature and under loud concert lights. Every frame is unique, and every frame holds a story."
+ },
+ "journey": {
+  "street": {
+   "img": {
+    "id": "street-jalebi",
+    "src": "photos/work/street-jalebi-full.webp",
+    "md": "photos/work/street-jalebi-md.webp",
+    "sm": "photos/work/street-jalebi-sm.webp",
+    "w": 1280,
+    "h": 854,
+    "lqip": "data:image/webp;base64,UklGRn4AAABXRUJQVlA4IHIAAAAQBACdASoYABAAPu1kqU2ppaOiMAgBMB2JYwCdAB6GO0K42bj3lRXxwAD9qTdTgYJYmbYHkdxpqvVXgk4R9xL21qhh80ev7yhjl0LI+d8bpFs8McuEO1ec01mR0PfHyvAcy/0ufIgYgES/chbSy44AAAA=",
+    "color": "#4d4045",
+    "focus": [
+     0.569,
+     0.357
+    ]
+   },
+   "title": "Jalebi at Midnight"
+  },
+  "portraits": {
+   "img": {
+    "id": "portrait-smile",
+    "src": "photos/work/portrait-smile-full.webp",
+    "md": "photos/work/portrait-smile-md.webp",
+    "sm": "photos/work/portrait-smile-sm.webp",
+    "w": 854,
+    "h": 1280,
+    "lqip": "data:image/webp;base64,UklGRnoAAABXRUJQVlA4IG4AAADwAwCdASoQABgAPu1iqk2ppaQiMAgBMB2JZQAAW9pq4VjBEJp/aKvAAP7es3qEsvi1enQ9oMfThYs3U2LWA7j5EeLgosvA40gJn/iLemC8PTCYPnunNdpOv51u0/uO89JWV9RK5zAnXSku3gAAAA==",
+    "color": "#8e8485",
+    "focus": [
+     0.462,
+     0.447
+    ]
+   },
+   "title": "Pure Joy"
+  },
+  "vintage": {
+   "img": {
+    "id": "vintage-ritual",
+    "src": "photos/work/vintage-ritual-full.webp",
+    "md": "photos/work/vintage-ritual-md.webp",
+    "sm": "photos/work/vintage-ritual-sm.webp",
+    "w": 1280,
+    "h": 960,
+    "lqip": "data:image/webp;base64,UklGRsIAAABXRUJQVlA4ILYAAADQBQCdASoYABIAPu1sqlEppiOiqAqpMB2JbACdMoR04aAAGT5C7r3oOAhOrMpJnZ+Fw8P+aFiAAPzKBhs5KxDxejkae3oPe+al+20VISaZx84rplvVp592ZM1yu5qVkYiW0cgp1n2n2IPRWl0ZPEVYv1yPkFvqLLy/uzVPhbTUX6zl4OWNhybxtuAZYRlXog+mOpYYnTFf25CiUCVMgJzE3Dc91wNAA5/MwZSNGucp4yMBmPJAAA==",
+    "color": "#85684b",
+    "focus": [
+     0.391,
+     0.385
+    ]
+   },
+   "title": "Fire & Marigold"
+  },
+  "nature": null,
+  "concerts": {
+   "img": {
+    "id": "sez-2334",
+    "src": "photos/work/sez-2334-full.webp",
+    "md": "photos/work/sez-2334-md.webp",
+    "sm": "photos/work/sez-2334-sm.webp",
+    "w": 1125,
+    "h": 2000,
+    "lqip": "data:image/webp;base64,UklGRo4AAABXRUJQVlA4IIIAAAAwBACdASoNABgAPu1iqU2ppaOiMAgBMB2JbACdMoAC/IZ7Yny8FKdjjCoA/VND6c5OmLR1tPZPeYp5WFwL5q1VvLfCmOSGyYLbwLhyFEIDNICX8qaTVs5VuL7vdyRVweCYb89w/HCsmem4Ss6dGTtEI45qqNb9xyc5T4SvwauU4AAA",
+    "color": "#6c6f87",
+    "focus": [
+     0.509,
+     0.503
+    ]
+   },
+   "title": "Under the LED Sky"
+  }
+ },
+ "featured": [
+  {
+   "img": {
+    "id": "street-sweets",
+    "src": "photos/work/street-sweets-full.webp",
+    "md": "photos/work/street-sweets-md.webp",
+    "sm": "photos/work/street-sweets-sm.webp",
+    "w": 1280,
+    "h": 854,
+    "lqip": "data:image/webp;base64,UklGRn4AAABXRUJQVlA4IHIAAAAwBACdASoYABAAPu1iqk2ppaQiMAgBMB2JbACdACB/4WYEOTCnsENvW4AA/u6hVqNVg9a3RKp+crSq04k/c0iXSmrQGjVP3YHdVuFNovnRNTqNDvn66cgh6R3gYFvnSq6Fzz+y7Z+s5hkQXYlvHSQwAAA=",
+    "color": "#442f17",
+    "focus": [
+     0.469,
+     0.361
+    ]
+   },
+   "title": "Weighing Sweetness"
+  },
+  {
+   "img": {
+    "id": "street-toys",
+    "src": "photos/work/street-toys-full.webp",
+    "md": "photos/work/street-toys-md.webp",
+    "sm": "photos/work/street-toys-sm.webp",
+    "w": 1280,
+    "h": 854,
+    "lqip": "data:image/webp;base64,UklGRogAAABXRUJQVlA4IHwAAABQBACdASoYABAAPu1iqU2ppaOiMAgBMB2JbACdMoACbifMpSxskFHf6fMAAPwapw8evkW/+8zLW4pf8q+Z6Byqox5RVyTyaZugp0KKdoLry53qdG3r8k7uHikhGFTys5a1Pfh9VSsYpYseoaLcXuvPxBkW5Dc+y/4YjCAA",
+    "color": "#6f3d37",
+    "focus": [
+     0.7,
+     0.52
+    ]
+   },
+   "title": "The Toy Seller"
+  },
+  {
+   "img": {
+    "id": "street-noodles",
+    "src": "photos/work/street-noodles-full.webp",
+    "md": "photos/work/street-noodles-md.webp",
+    "sm": "photos/work/street-noodles-sm.webp",
+    "w": 1280,
+    "h": 854,
+    "lqip": "data:image/webp;base64,UklGRoIAAABXRUJQVlA4IHYAAADwAwCdASoYABAAPu1krU6ppaSiMAgBMB2JYgCdAGlf3eSUv3bTpByAAP7+FGOi0SmIxIDrLyF3CcDccn6nQf0Lo/yIoNS1Bb4HYQgis63/fg2rUGh062pe3fFI9MryYY8GmZEwFXe9BjY5iUpKLFHkVmV8mYAA",
+    "color": "#2a2d38",
+    "focus": [
+     0.643,
+     0.345
+    ]
+   },
+   "title": "Night Wok"
+  }
+ ],
+ "collections": [
+  {
+   "img": {
+    "id": "sez-2329",
+    "src": "photos/work/sez-2329-full.webp",
+    "md": "photos/work/sez-2329-md.webp",
+    "sm": "photos/work/sez-2329-sm.webp",
+    "w": 1329,
+    "h": 2000,
+    "lqip": "data:image/webp;base64,UklGRpIAAABXRUJQVlA4IIYAAAAwBACdASoQABgAPu1iqU2ppaQiMAgBMB2JbACdMoRwACVBToXJk3stgFgA/VCXdPrbDGttchg7aKlRNC7cbOirvuvqGNYOULWKXtfhkvG3sMTkDDD+w74/D1cwCrkVDa5Z44rHCjKK8ABpzbiUeuRsCJRczurDi34REz1EUBr6X9BjxvAAAA==",
+    "color": "#348ab7",
+    "focus": [
+     0.522,
+     0.561
+    ]
+   },
+   "title": "Cyan Haze",
+   "type": "Concert · Colour"
+  },
+  {
+   "img": {
+    "id": "sez-2630",
+    "src": "photos/work/sez-2630-full.webp",
+    "md": "photos/work/sez-2630-md.webp",
+    "sm": "photos/work/sez-2630-sm.webp",
+    "w": 1203,
+    "h": 2000,
+    "lqip": "data:image/webp;base64,UklGRlgAAABXRUJQVlA4IEwAAABQAwCdASoOABgAPu1mq04ppaQiMAgBMB2JZ2M+ADtPmqIOAAD+8DyRsfwK/3vLNlKB7ImdCg1laXlfKJIzQ5TGYUyVTQjPYFaA0AAA",
+    "color": "#221617",
+    "focus": [
+     0.575,
+     0.404
+    ]
+   },
+   "title": "Lost in the Song",
+   "type": "Concert · Profile"
+  },
+  {
+   "img": {
+    "id": "street-biryani",
+    "src": "photos/work/street-biryani-full.webp",
+    "md": "photos/work/street-biryani-md.webp",
+    "sm": "photos/work/street-biryani-sm.webp",
+    "w": 1280,
+    "h": 854,
+    "lqip": "data:image/webp;base64,UklGRm4AAABXRUJQVlA4IGIAAADwAwCdASoYABAAPu1iqU2ppaOiMAgBMB2JQAALfZW4i4ftXimthvgSAP7ypoU6ZPpZxflttLXB7Iq5QW76QYn+1x4kO6hrypAy1OrQa3uCv2Ds17hVJi9/VAjUk/+nmTAAAA==",
+    "color": "#212326",
+    "focus": [
+     0.6,
+     0.45
+    ]
+   },
+   "title": "Biryani Queue",
+   "type": "Street · Night market"
+  },
+  {
+   "img": {
+    "id": "sez-2371",
+    "src": "photos/work/sez-2371-full.webp",
+    "md": "photos/work/sez-2371-md.webp",
+    "sm": "photos/work/sez-2371-sm.webp",
+    "w": 1125,
+    "h": 2000,
+    "lqip": "data:image/webp;base64,UklGRnIAAABXRUJQVlA4IGYAAADwAwCdASoOABgAPu1iqk2ppaQiMAgBMB2JaQAAXpvjBSfSeQ6BOBeAAP6YCP6e53sW0wevpb0Huqri7N/J+n3OlRyPQ7l2RLexHLYrPzTbaenerm+FOCMMwzPMxu+wTZfMLrgAAAA=",
+    "color": "#626262",
+    "focus": [
+     0.526,
+     0.379
+    ]
+   },
+   "title": "Monochrome Voice",
+   "type": "Concert · Black & White"
+  },
+  {
+   "img": {
+    "id": "sez-2576",
+    "src": "photos/work/sez-2576-full.webp",
+    "md": "photos/work/sez-2576-md.webp",
+    "sm": "photos/work/sez-2576-sm.webp",
+    "w": 1428,
+    "h": 2000,
+    "lqip": "data:image/webp;base64,UklGRoAAAABXRUJQVlA4IHQAAAAQBQCdASoRABgAPu1iqE2ppaOiMAgBMB2JbADE+SADA2V+HEapw+btDpZ1sBUvcH7kAP7xag2TL8djr/F5vodYNXf9Waa1eIKxxoplx2cju51wkBt9EvfmzXes7Nxaj2ykfQ6lQCE5mlEPA+YIjwEmQ4QAAA==",
+    "color": "#132646",
+    "focus": [
+     0.341,
+     0.375
+    ]
+   },
+   "title": "Rock On",
+   "type": "Concert · Gesture"
+  },
+  {
+   "img": {
+    "id": "sez-2441",
+    "src": "photos/work/sez-2441-full.webp",
+    "md": "photos/work/sez-2441-md.webp",
+    "sm": "photos/work/sez-2441-sm.webp",
+    "w": 1319,
+    "h": 2000,
+    "lqip": "data:image/webp;base64,UklGRoYAAABXRUJQVlA4IHoAAACwBACdASoQABgAPu1iqU2ppaOiMAgBMB2JbACdMoRwN6BTIgE3C5t04t6nxygAAP7acn7M5brX7I3pHYzbi/6LRICBOS2v9opgr8YL3p+3FCpDWuTmHSTFa67jnw+aVy40XSChk4Ck/2DXIx66FI1vhnc14zOHwAAAAA==",
+    "color": "#22468b",
+    "focus": [
+     0.499,
+     0.405
+    ]
+   },
+   "title": "Blue Hour Ballad",
+   "type": "Concert · Stage light"
+  },
+  {
+   "img": {
+    "id": "portrait-steps",
+    "src": "photos/work/portrait-steps-full.webp",
+    "md": "photos/work/portrait-steps-md.webp",
+    "sm": "photos/work/portrait-steps-sm.webp",
+    "w": 854,
+    "h": 1280,
+    "lqip": "data:image/webp;base64,UklGRmwAAABXRUJQVlA4IGAAAAAQBACdASoQABgAPu1iqU2ppaOiMAgBMB2JYwDImBuLE8TjhD2tf5sxAAD+6NVfUFrek8L0oFPzXqErCVsYerE+24MnHXGt+yL/3uebOYOCvRL1CnRcrHF99iLUyTkgAAA=",
+    "color": "#464049",
+    "focus": [
+     0.45,
+     0.403
+    ]
+   },
+   "title": "Shy Steps",
+   "type": "Portrait · Selective colour"
+  },
+  {
+   "img": {
+    "id": "sez-2474",
+    "src": "photos/work/sez-2474-full.webp",
+    "md": "photos/work/sez-2474-md.webp",
+    "sm": "photos/work/sez-2474-sm.webp",
+    "w": 1333,
+    "h": 2000,
+    "lqip": "data:image/webp;base64,UklGRmgAAABXRUJQVlA4IFwAAABwAwCdASoQABgAPu1iqU2ppaOiMAgBMB2JQBibBAojg0BWaTAA/vMmuukttwtdEfJjV6Se/MKw2YQZKW51t1A3ADr8ZAXKgfT9bR6LdXUgupUiXSbH35hhKkAAAA==",
+    "color": "#171c29",
+    "focus": [
+     0.554,
+     0.376
+    ]
+   },
+   "title": "Through the Smoke",
+   "type": "Concert · Atmosphere"
+  },
+  {
+   "img": {
+    "id": "sez-2340",
+    "src": "photos/work/sez-2340-full.webp",
+    "md": "photos/work/sez-2340-md.webp",
+    "sm": "photos/work/sez-2340-sm.webp",
+    "w": 2000,
+    "h": 1125,
+    "lqip": "data:image/webp;base64,UklGRpIAAABXRUJQVlA4IIYAAAAQBACdASoYAA4APu1iqU2ppaQiMAgBMB2JbACdAB4Zvua8pfu5p1w5kAD+6iwP5ErbN+Pohnz1xeEO4bn64BZgXEbdR2jDnba7plGACHOvmLR8/+n8990BUJCnn81WW9kACGfJVnHrVjVfwl5WTdR/WQnVtzWpFu0pK63kL9GzB33CWDqAAA==",
+    "color": "#896779",
+    "focus": [
+     0.575,
+     0.51
+    ]
+   },
+   "title": "Glitch Sky",
+   "type": "Concert · LED wall"
+  },
+  {
+   "img": {
+    "id": "sez-2540",
+    "src": "photos/work/sez-2540-full.webp",
+    "md": "photos/work/sez-2540-md.webp",
+    "sm": "photos/work/sez-2540-sm.webp",
+    "w": 1125,
+    "h": 2000,
+    "lqip": "data:image/webp;base64,UklGRlgAAABXRUJQVlA4IEwAAAAQBACdASoOABgAPu1qrU8ppiQiMAgBMB2JZQC06CHgSDOP2qBXcQXaAAD+8qqhtCHLpJiIUxK1CvPbZRhHxtIQSCE2I+9QRTUgAAAA",
+    "color": "#271918",
+    "focus": [
+     0.649,
+     0.434
+    ]
+   },
+   "title": "Reach",
+   "type": "Concert · Gesture"
+  },
+  {
+   "img": {
+    "id": "street-eggroll",
+    "src": "photos/work/street-eggroll-full.webp",
+    "md": "photos/work/street-eggroll-md.webp",
+    "sm": "photos/work/street-eggroll-sm.webp",
+    "w": 1280,
+    "h": 854,
+    "lqip": "data:image/webp;base64,UklGRoIAAABXRUJQVlA4IHYAAAAwBACdASoYABAAPu1mq04ppaQiMAgBMB2JYwCdAB6nhyW71BUNfVhwBiAA/unqsZezmcnwQwfe2VKxmab9PtRmZ/7FilOB1zR67c6d8TsG7GrmngvXqVeElMn9b1LKLb98lKJU2JM3bmD4NAI0jtVvQNP2hAAA",
+    "color": "#382c2a",
+    "focus": [
+     0.36,
+     0.45
+    ]
+   },
+   "title": "Egg Roll Corner",
+   "type": "Street · Night market"
+  },
+  {
+   "img": {
+    "id": "sez-3636",
+    "src": "photos/work/sez-3636-full.webp",
+    "md": "photos/work/sez-3636-md.webp",
+    "sm": "photos/work/sez-3636-sm.webp",
+    "w": 1257,
+    "h": 2000,
+    "lqip": "data:image/webp;base64,UklGRngAAABXRUJQVlA4IGwAAACQAwCdASoPABgAPu1oqk6ppiQiMAgBMB2JaQAAHJ5cL685zMOAAPl0673P6v8uDB8gDYf0YSXknXvjbapGOareDgYzsaBMBMNJnyqHsBxDLGRnKs0ZrAHVoUHQxn0IwflnprkW3mYy3NkAAAA=",
+    "color": "#262626",
+    "focus": [
+     0.508,
+     0.521
+    ]
+   },
+   "title": "Between the Beams",
+   "type": "Concert · Stage light"
+  },
+  {
+   "img": {
+    "id": "sez-2335",
+    "src": "photos/work/sez-2335-full.webp",
+    "md": "photos/work/sez-2335-md.webp",
+    "sm": "photos/work/sez-2335-sm.webp",
+    "w": 1239,
+    "h": 2000,
+    "lqip": "data:image/webp;base64,UklGRo4AAABXRUJQVlA4IIIAAAAwBACdASoPABgAPu1iqk2ppaQiMAgBMB2JaACdIDZBo8tbULu2WG7+7gAA/qjo1xMOaOmd7zq5tKUHzlSAq5VTWEYffpE4gRO2jROV+rNvIC1YYLne13QxDJBp7GxwcI9VFafB0hHD0QVPVvpzMC5pe0V6CCQe+WvCqVtFQgoQEAAA",
+    "color": "#737682",
+    "focus": [
+     0.509,
+     0.435
+    ]
+   },
+   "title": "Static Sky",
+   "type": "Concert · LED wall"
+  },
+  {
+   "img": {
+    "id": "sez-2635",
+    "src": "photos/work/sez-2635-full.webp",
+    "md": "photos/work/sez-2635-md.webp",
+    "sm": "photos/work/sez-2635-sm.webp",
+    "w": 1333,
+    "h": 2000,
+    "lqip": "data:image/webp;base64,UklGRngAAABXRUJQVlA4IGwAAAAQBACdASoQABgAPu1iqU2ppaOiMAgBMB2JbAC06BuS+Xxj7rZ2DgISGAD+5uNMyoirffgHwa9tnnQWlpwhPnbR5AewbKkYN23HzQSUbwdg5DVtRU4Xm4R8lezlzZmki5NVtoa8QLPHQp12MAA=",
+    "color": "#362743",
+    "focus": [
+     0.466,
+     0.387
+    ]
+   },
+   "title": "Neon Dream",
+   "type": "Concert · Colour"
+  },
+  {
+   "img": {
+    "id": "sez-2549-2",
+    "src": "photos/work/sez-2549-2-full.webp",
+    "md": "photos/work/sez-2549-2-md.webp",
+    "sm": "photos/work/sez-2549-2-sm.webp",
+    "w": 1427,
+    "h": 2000,
+    "lqip": "data:image/webp;base64,UklGRngAAABXRUJQVlA4IGwAAAAwBACdASoRABgAPu1mrE+ppSQqMBgIAUAdiWkAACOKL+m5D9FLXL1ip8AA/uc/L3/EVMesCDXVMrICTPwaEF/O/Ff2OZN4Zffuyyvc3Yx5+NHq9BQPEG/4AOZldzbUD5E5EIGMttFGAMAAAAA=",
+    "color": "#797979",
+    "focus": [
+     0.493,
+     0.422
+    ]
+   },
+   "title": "High Note",
+   "type": "Concert · Black & White"
+  },
+  {
+   "img": {
+    "id": "street-jalebi-smile",
+    "src": "photos/work/street-jalebi-smile-full.webp",
+    "md": "photos/work/street-jalebi-smile-md.webp",
+    "sm": "photos/work/street-jalebi-smile-sm.webp",
+    "w": 1280,
+    "h": 854,
+    "lqip": "data:image/webp;base64,UklGRnoAAABXRUJQVlA4IG4AAADQAwCdASoYABAAPu1kqk2ppaQiMAgBMB2JZQC06B6GOecbqWXBZ+AA/un1t4jBR9uiegZ/q4AhwrbP1RjfPwGhIkMfRf8xwUriykNrBjtcqeH51t134cD/hhEjxA0UZxCJldCRD4+X7Yyku/MYAA==",
+    "color": "#35292a",
+    "focus": [
+     0.639,
+     0.468
+    ]
+   },
+   "title": "The Jalebi Smile",
+   "type": "Street · Portrait"
+  },
+  {
+   "img": {
+    "id": "sez-2598",
+    "src": "photos/work/sez-2598-full.webp",
+    "md": "photos/work/sez-2598-md.webp",
+    "sm": "photos/work/sez-2598-sm.webp",
+    "w": 1491,
+    "h": 2000,
+    "lqip": "data:image/webp;base64,UklGRngAAABXRUJQVlA4IGwAAAAQBACdASoSABgAPuVip02pJaOiMAwBIByJQBOgBDtKfvfYzjI7LGSw8gD+8q0W6XcNc9jASSGkdibtsnAI3itfreKGLjfMPdj7wuLWD8BfDgLjwiiFR8jyogFT3ULDxIoGNy4hSauj/8YAAAA=",
+    "color": "#20152e",
+    "focus": [
+     0.529,
+     0.402
+    ]
+   },
+   "title": "Hands to the Light",
+   "type": "Concert · Emotion"
+  },
+  {
+   "img": {
+    "id": "sez-2667",
+    "src": "photos/work/sez-2667-full.webp",
+    "md": "photos/work/sez-2667-md.webp",
+    "sm": "photos/work/sez-2667-sm.webp",
+    "w": 1125,
+    "h": 2000,
+    "lqip": "data:image/webp;base64,UklGRnoAAABXRUJQVlA4IG4AAADQAwCdASoOABgAPu1orU2ppqSiMAgBMB2JaQABHu9sxPHWyk+2eQAA/vwU7cKx20r//ojDVh8lQK65MCgPBaVccJyF7yidk3L77Ub66ufOLL/pqtQ/DVXwdvJ5D3Xrsel7/tLTP/vjxjhUgAAAAA==",
+    "color": "#b4b4b4",
+    "focus": [
+     0.713,
+     0.631
+    ]
+   },
+   "title": "White Silhouette",
+   "type": "Concert · Minimal"
+  },
+  {
+   "img": {
+    "id": "sez-2690",
+    "src": "photos/work/sez-2690-full.webp",
+    "md": "photos/work/sez-2690-md.webp",
+    "sm": "photos/work/sez-2690-sm.webp",
+    "w": 1183,
+    "h": 2000,
+    "lqip": "data:image/webp;base64,UklGRooAAABXRUJQVlA4IH4AAADwBACdASoOABgAPu1iqU2ppaQiMAgBMB2JbACdMoRwACn+g8S/2OlEqAvWPTYB4gAA/XHfwnDCJE521BW0aXdUHJ37/TJwKoLydMpzP3liVazA/m4IE7GrueD6jW76P47goiqTjcbUs7X9nH5WZZCIuuDqG7lvVvmsdKlAAAA=",
+    "color": "#227034",
+    "focus": [
+     0.52,
+     0.38
+    ]
+   },
+   "title": "Emerald Stage",
+   "type": "Concert · Colour"
+  },
+  {
+   "img": {
+    "id": "sez-2381",
+    "src": "photos/work/sez-2381-full.webp",
+    "md": "photos/work/sez-2381-md.webp",
+    "sm": "photos/work/sez-2381-sm.webp",
+    "w": 2000,
+    "h": 1125,
+    "lqip": "data:image/webp;base64,UklGRnIAAABXRUJQVlA4IGYAAAAwBACdASoYAA4APu1iqU2ppaQiMAgBMB2JbACdACHho6LlbauOyPrInwAA/vKlXRLaYkmTiHS8Aiav3MSewstS+I4edfq4mP/+cWV4nzVLGkNs2H2/6pV2Rbjwd/iJPjfRuHARcAA=",
+    "color": "#2a051b",
+    "focus": [
+     0.5,
+     0.62
+    ]
+   },
+   "title": "Echoes in Red",
+   "type": "Concert · Scale"
+  },
+  {
+   "img": {
+    "id": "sez-3714-prompt",
+    "src": "photos/work/sez-3714-prompt-full.webp",
+    "md": "photos/work/sez-3714-prompt-md.webp",
+    "sm": "photos/work/sez-3714-prompt-sm.webp",
+    "w": 1594,
+    "h": 2000,
+    "lqip": "data:image/webp;base64,UklGRn4AAABXRUJQVlA4IHIAAACQBACdASoTABgAPu1qrFCppaQiqAqpMB2JZwDNwBEgnl4mTyk6gTK8OL6ZVoAA/un1B3Tz4EBbDe8XMsU8nnxDK1iFqOQApjjgj9UWeN2c08qYsclSOs1A9fAR9Lo3vF5ZppXjQpx6LUD4H35NZYbOAAA=",
+    "color": "#393c45",
+    "focus": [
+     0.457,
+     0.361
+    ]
+   },
+   "title": "Light Trails",
+   "type": "Concert · Creative edit"
+  },
+  {
+   "img": {
+    "id": "sez-3646",
+    "src": "photos/work/sez-3646-full.webp",
+    "md": "photos/work/sez-3646-md.webp",
+    "sm": "photos/work/sez-3646-sm.webp",
+    "w": 1579,
+    "h": 2000,
+    "lqip": "data:image/webp;base64,UklGRqYAAABXRUJQVlA4IJoAAAAQBQCdASoTABgAPu1orVCppaQiqAqpMB2JQBdmarg3Hm0WVPDN7u2mFQPfQxhqw7cAAP5Pp1/tyNsgb0lBs38zKSVnHWjB6TEyUGIDEFOOXKHV4Az0/zDZkAVIGnh/zKpnKuDxD3HOM5QTrCSctV8U7x9IfNSITLpi/hSvpgbk+YdIocZZZy+XCNi1Ua7V4HJGFI1BIz1+zkAA",
+    "color": "#251f36",
+    "focus": [
+     0.479,
+     0.444
+    ]
+   },
+   "title": "Crimson Spotlight",
+   "type": "Concert · Colour"
+  },
+  {
+   "img": {
+    "id": "sez-3707",
+    "src": "photos/work/sez-3707-full.webp",
+    "md": "photos/work/sez-3707-md.webp",
+    "sm": "photos/work/sez-3707-sm.webp",
+    "w": 1458,
+    "h": 2000,
+    "lqip": "data:image/webp;base64,UklGRlYAAABXRUJQVlA4IEoAAADwAgCdASoRABgAPu1urlIppiQnqAgBMB2JYwAAQphlAAD+7+pgo/0c3WVgnfsbFgtHYAFG2z9b4rTPi8BKdHNDC9Q0J5VdMAAAAA==",
+    "color": "#231016",
+    "focus": [
+     0.572,
+     0.32
+    ]
+   },
+   "title": "Red Jacket",
+   "type": "Concert · Portrait"
+  },
+  {
+   "img": {
+    "id": "sez-2361",
+    "src": "photos/work/sez-2361-full.webp",
+    "md": "photos/work/sez-2361-md.webp",
+    "sm": "photos/work/sez-2361-sm.webp",
+    "w": 1266,
+    "h": 2000,
+    "lqip": "data:image/webp;base64,UklGRpAAAABXRUJQVlA4IIQAAAAwBACdASoPABgAPu1iqU2ppaOiMAgBMB2JbACw7BrfVh9gQH5Som8rfmAA/u9mlT8y7TGKelvwpbEFif2M2cHsb/5A7rSWZi0LXQ6oj58SRDHyTAQk1rxTUuIeWmJZ9xSXeqekbaLQOrcJ7HqmbArvmF4RK+CuhEhfYHfxFQoqtaK6IAA=",
+    "color": "#492a37",
+    "focus": [
+     0.517,
+     0.372
+    ]
+   },
+   "title": "Open Arms",
+   "type": "Concert · Performance"
+  },
+  {
+   "img": {
+    "id": "sez-2453",
+    "src": "photos/work/sez-2453-full.webp",
+    "md": "photos/work/sez-2453-md.webp",
+    "sm": "photos/work/sez-2453-sm.webp",
+    "w": 1468,
+    "h": 2000,
+    "lqip": "data:image/webp;base64,UklGRpoAAABXRUJQVlA4II4AAAAQBQCdASoSABgAPu1osFAppaUiqAqpMB2JbCzAAqTZg7YAsf/PxmAxl1OKR3qqXMPCAP7sPjL2vgEShtSo0EAwFgiQ2F77bJncLtktXBReXaGyvCOoCI41/NLBz8rCRpgDUrtvbYCyekEZLikwnJ0p6OnJGm+1xQYEgrWY5fM0qDTn5KLOkI22qyLgAAAA",
+    "color": "#17375f",
+    "focus": [
+     0.524,
+     0.457
+    ]
+   },
+   "title": "Blue Profile",
+   "type": "Concert · Close-up"
+  },
+  {
+   "img": {
+    "id": "sez-2532",
+    "src": "photos/work/sez-2532-full.webp",
+    "md": "photos/work/sez-2532-md.webp",
+    "sm": "photos/work/sez-2532-sm.webp",
+    "w": 1125,
+    "h": 2000,
+    "lqip": "data:image/webp;base64,UklGRmAAAABXRUJQVlA4IFQAAADwAwCdASoOABgAPu1kqU2ppaQiMAgBMB2JZwDDNCG59jLxQB1zpywAAP7unKZqKBBL41jh76w/Q0jE/edZs2MhmWLo+fp2AXl3FS7Hd20dFO+AAAA=",
+    "color": "#302a24",
+    "focus": [
+     0.519,
+     0.528
+    ]
+   },
+   "title": "Sepia Stage",
+   "type": "Concert · Toned"
+  }
+ ],
+ "frames": [
+  {
+   "img": {
+    "id": "puja-devi",
+    "src": "photos/work/puja-devi-full.webp",
+    "md": "photos/work/puja-devi-md.webp",
+    "sm": "photos/work/puja-devi-sm.webp",
+    "w": 1024,
+    "h": 1280,
+    "lqip": "data:image/webp;base64,UklGRmYAAABXRUJQVlA4IFoAAACQBACdASoTABgAPu1mq04ppaQiMAgBMB2JYwDMWCHgAJU4Pl5xQPBMmzSl3HgA/vQbiypPldxzrgixrR6YMtbySdaJJolB/OVqbaG8YGNeVB/3TWm0Di/TAAA=",
+    "color": "#1e1311",
+    "focus": [
+     0.532,
+     0.5
+    ]
+   },
+   "title": "Devi in the Dark"
+  },
+  {
+   "img": {
+    "id": "puja-lights",
+    "src": "photos/work/puja-lights-full.webp",
+    "md": "photos/work/puja-lights-md.webp",
+    "sm": "photos/work/puja-lights-sm.webp",
+    "w": 1280,
+    "h": 854,
+    "lqip": "data:image/webp;base64,UklGRkwAAABXRUJQVlA4IEAAAABwAwCdASoYABAAPu1mqk2ppaQiMAgBMB2JYwAAW+s7MwCXVGAA/vQbFMKCmPNGYel+Mnpz3JV+0n1LQ4GXFAAA",
+    "color": "#140e0f",
+    "focus": [
+     0.523,
+     0.545
+    ]
+   },
+   "title": "Festival of Lights"
+  },
+  {
+   "img": {
+    "id": "puja-motion",
+    "src": "photos/work/puja-motion-full.webp",
+    "md": "photos/work/puja-motion-md.webp",
+    "sm": "photos/work/puja-motion-sm.webp",
+    "w": 898,
+    "h": 1280,
+    "lqip": "data:image/webp;base64,UklGRqQAAABXRUJQVlA4IJgAAAAQBQCdASoRABgAPu1qrVEppaQiqAqpMB2JZACdMuiBxREJyG+4c6/vda3LOW2t39iYAP7y2iJ6Mo4EoNOiQGfLYYtsSNH9P+agkT7Fw7tCGzLv4ImbXSYyc4YgVY9DQbns5cjtTjPohuKyaEXT5AtpyS23Dx7CAepUNIPk35i0DSwgpVCxysvLGhHnjxjUKbKXUl2UjcAAAA==",
+    "color": "#723924",
+    "focus": [
+     0.474,
+     0.37
+    ]
+   },
+   "title": "Motion Prayer"
+  },
+  {
+   "img": {
+    "id": "street-dhaki",
+    "src": "photos/work/street-dhaki-full.webp",
+    "md": "photos/work/street-dhaki-md.webp",
+    "sm": "photos/work/street-dhaki-sm.webp",
+    "w": 1280,
+    "h": 854,
+    "lqip": "data:image/webp;base64,UklGRmAAAABXRUJQVlA4IFQAAAAQBACdASoYABAAPu1kqU2ppaQiMAgBMB2JZACdACHfUTcpsvJORvJccAD+8Lz+74dYMoucqzMf8Plvx3JuCvuNz9DQv3Yav6Ndn9lu9ilIC/gAAAA=",
+    "color": "#301724",
+    "focus": [
+     0.36,
+     0.45
+    ]
+   },
+   "title": "The Dhaki's Rest"
+  },
+  {
+   "img": {
+    "id": "street-balloons",
+    "src": "photos/work/street-balloons-full.webp",
+    "md": "photos/work/street-balloons-md.webp",
+    "sm": "photos/work/street-balloons-sm.webp",
+    "w": 854,
+    "h": 1280,
+    "lqip": "data:image/webp;base64,UklGRoIAAABXRUJQVlA4IHYAAAAQBACdASoQABgAPu1mq04ppaQiMAgBMB2JZACdIICBzch/zCozNkgBMgD+722NJbECm3TmWCdOjfmMFu7G8iZ3SRHWeTbOFJYi/rJQmRk98ooNDalZgY1MXauFE2oGyLrCbqU90i+/q6c9K9JQYR3vcxdSNAAA",
+    "color": "#2a212a",
+    "focus": [
+     0.5,
+     0.48
+    ]
+   },
+   "title": "Balloon Seller"
+  },
+  {
+   "img": {
+    "id": "street-blouses",
+    "src": "photos/work/street-blouses-full.webp",
+    "md": "photos/work/street-blouses-md.webp",
+    "sm": "photos/work/street-blouses-sm.webp",
+    "w": 854,
+    "h": 1280,
+    "lqip": "data:image/webp;base64,UklGRpIAAABXRUJQVlA4IIYAAACQBACdASoQABgAPu1iqU2ppaOiMAgBMB2JbACdMoCGACY8Z0q9lVEbFEb7OgAA+xpY7ows5vV8c5SQYHCXC1g4C6T+9a3N43g4QpqCo6mEN4v16eaunyHnhHquisIT+iTu4PI5egP61EXFrraGUe0PSW5XUyUDniRTq/R8WIFiYpfEJ2AAAA==",
+    "color": "#703b35",
+    "focus": [
+     0.423,
+     0.535
+    ]
+   },
+   "title": "Blouse Lane"
+  }
+ ]
+}
