@@ -12,11 +12,14 @@
   <meta property="og:image" content="photos/prasant/about.jpg" />
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230b0b0c'/%3E%3Ccircle cx='32' cy='32' r='13' fill='none' stroke='%23fff' stroke-width='4'/%3E%3Ccircle cx='32' cy='32' r='4' fill='%23fff'/%3E%3C/svg%3E" />
 
+  <link rel="preload" as="image" href="photos/prasant/hero.webp" fetchpriority="high" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
-  <script type="module" crossorigin src="./assets/index-q30zL34z.js"></script>
-  <link rel="stylesheet" crossorigin href="./assets/index-Nz6PmZg2.css">
+  <script type="module" crossorigin src="./assets/main-Dcd-LZAJ.js"></script>
+  <link rel="modulepreload" crossorigin href="./assets/modulepreload-polyfill-P2Xu9kJm.js">
+  <link rel="modulepreload" crossorigin href="./assets/content-DEpiYMKy.js">
+  <link rel="stylesheet" crossorigin href="./assets/main-Cu5F4PfQ.css">
 </head>
 <body class="is-loading">
 
@@ -107,7 +110,7 @@
       </div>
 
       <div class="hero__right">
-        <p class="hero__lead">I try to find a story behind every frame — because every frame is unique.</p>
+        <p class="hero__lead" id="heroLead">I try to find a story behind every frame — because every frame is unique.</p>
         <ul class="hero__list">
           <li>Street</li>
           <li>Portraits</li>
@@ -139,7 +142,7 @@
             <div class="about__bottom">
               <div class="about__text">
                 <p class="about__label"><b>DISCIPLINE &amp; CRAFT</b><span>STREET / PORTRAITS / VINTAGE / NATURE / CONCERTS</span></p>
-                <p class="about__body">I'm Prasant Shil Sarma — a photographer who is still learning, because I believe learning never stops in photography. I chase stories on the street, in faces, in faded vintage tones, in quiet nature and under loud concert lights. Every frame is unique, and every frame holds a story.</p>
+                <p class="about__body" id="aboutBody">I'm Prasant Shil Sarma — a photographer who is still learning, because I believe learning never stops in photography. I chase stories on the street, in faces, in faded vintage tones, in quiet nature and under loud concert lights. Every frame is unique, and every frame holds a story.</p>
               </div>
               <div class="about__btns">
                 <a href="#contact" class="btn btn--light" data-scroll-to>Let's talk</a>
@@ -185,7 +188,7 @@
                   <div><dt>LESSON</dt><dd>Patience over perfection</dd></div>
                 </dl>
               </div>
-              <figure class="jpanel__photo" data-lightbox="photos/work/street-jalebi.jpg" data-title="Jalebi at Midnight"><img src="photos/work/sm/street-jalebi.jpg" alt="An elderly man frying jalebi at a roadside stall at night" loading="lazy" style="object-position:56% 50%" /></figure>
+              <div class="jpanel__media" data-slot="street" data-num="01"></div>
             </div>
           </article>
 
@@ -202,7 +205,7 @@
                   <div><dt>LESSON</dt><dd>Connection first, camera second</dd></div>
                 </dl>
               </div>
-              <figure class="jpanel__photo" data-lightbox="photos/work/portrait-smile.jpg" data-title="Pure Joy"><img src="photos/work/sm/portrait-smile.jpg" alt="A little girl in a pink dress smiling, in selective colour" loading="lazy" /></figure>
+              <div class="jpanel__media" data-slot="portraits" data-num="02"></div>
             </div>
           </article>
 
@@ -219,7 +222,7 @@
                   <div><dt>LESSON</dt><dd>Imperfection has character</dd></div>
                 </dl>
               </div>
-              <figure class="jpanel__photo" data-lightbox="photos/work/vintage-ritual.jpg" data-title="Fire &amp; Marigold"><img src="photos/work/sm/vintage-ritual.jpg" alt="A devotee crowned with leaves and marigolds in a festival procession, with a film look" loading="lazy" style="object-position:38% 50%" /></figure>
+              <div class="jpanel__media" data-slot="vintage" data-num="03"></div>
             </div>
           </article>
 
@@ -236,7 +239,7 @@
                   <div><dt>LESSON</dt><dd>Slow down and observe</dd></div>
                 </dl>
               </div>
-              <div class="jpanel__num" aria-hidden="true">04</div>
+              <div class="jpanel__media" data-slot="nature" data-num="04"></div>
             </div>
           </article>
 
@@ -253,7 +256,7 @@
                   <div><dt>LESSON</dt><dd>Anticipate the peak moment</dd></div>
                 </dl>
               </div>
-              <figure class="jpanel__photo" data-lightbox="photos/work/sez-2334.jpg" data-title="Under the LED Sky"><img src="photos/work/sm/sez-2334.jpg" alt="Singer on stage in front of a colourful LED wall" loading="lazy" /></figure>
+              <div class="jpanel__media" data-slot="concerts" data-num="05"></div>
             </div>
           </article>
 
@@ -277,9 +280,9 @@
         <h2 class="featured__title" data-text="FEATURED WORK">FEATURED WORK</h2>
         <p class="featured__sub">Stories from the street</p>
         <div class="featured__stage">
-          <figure class="fcard fcard--a" data-lightbox="photos/work/street-sweets.jpg" data-title="Weighing Sweetness"><img src="photos/work/sm/street-sweets.jpg" alt="A sweet seller weighing a paper bag of sweets" loading="lazy" /><figcaption>Weighing Sweetness</figcaption></figure>
-          <figure class="fcard fcard--b" data-lightbox="photos/work/street-toys.jpg" data-title="The Toy Seller"><img src="photos/work/sm/street-toys.jpg" alt="A toy seller sitting beside his colourful stall of dolls and idols" loading="lazy" /><figcaption>The Toy Seller</figcaption></figure>
-          <figure class="fcard fcard--c" data-lightbox="photos/work/street-noodles.jpg" data-title="Night Wok"><img src="photos/work/sm/street-noodles.jpg" alt="A young cook tossing noodles at a night stall" loading="lazy" /><figcaption>Night Wok</figcaption></figure>
+          <figure class="fcard fcard--a" data-featured="0"></figure>
+          <figure class="fcard fcard--b" data-featured="1"></figure>
+          <figure class="fcard fcard--c" data-featured="2"></figure>
         </div>
       </div>
     </section>
