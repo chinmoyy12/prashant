@@ -380,7 +380,7 @@ function setRibbonCaption(i: number) {
 }
 function buildRibbonFallback() {
   const fb = $('#ribbonFallback');
-  fb.innerHTML = COLLECTIONS.map((c) => `<figure data-lightbox="${c.src}" data-title="${c.title}"><img src="${c.thumb}" alt="${c.title}" loading="lazy" /></figure>`).join('');
+  fb.innerHTML = COLLECTIONS.map((c) => `<figure data-lightbox="${c.src}" data-title="${c.title}"><img src="${c.thumb}" alt="${c.title}" loading="lazy"${objPos(c)} /></figure>`).join('');
   fb.hidden = false;
   $<HTMLCanvasElement>('#ribbon').hidden = true;
   setRibbonCaption(0);
@@ -389,7 +389,7 @@ function buildRibbonFallback() {
 let ribbon: Ribbon | null = null;
 const RIBBON_SPAN = 0.92;
 const ribbonST = ScrollTrigger.create({
-  trigger: '.collections', start: 'top top', end: '+=220%', pin: true, anticipatePin: 1,
+  trigger: '.collections', start: 'top top', end: '+=340%', pin: true, anticipatePin: 1,
   onUpdate: (s) => ribbon?.setScroll(s.progress * ribbon.total * RIBBON_SPAN),
 });
 async function setupRibbon() {
@@ -425,7 +425,8 @@ const ring = $('#framesRing');
 const list = $('#framesList');
 const N = FRAMES.length;
 const STEP = 360 / N;
-ring.innerHTML = FRAMES.map((f, i) => `<div class="frame-card" data-i="${i}"><img src="${f.thumb}" alt="${f.title}" loading="lazy" draggable="false" /><span>${f.title}</span></div>`).join('');
+const objPos = (f: Photo) => (f.focus ? ` style="object-position:${f.focus[0] * 100}% ${f.focus[1] * 100}%"` : '');
+ring.innerHTML = FRAMES.map((f, i) => `<div class="frame-card" data-i="${i}"><img src="${f.thumb}" alt="${f.title}" loading="lazy" draggable="false"${objPos(f)} /><span>${f.title}</span></div>`).join('');
 list.innerHTML = FRAMES.map((f, i) => `<li data-i="${i}">${f.title}</li>`).join('');
 const cards = $$('.frame-card', ring);
 const listItems = $$('li', list);

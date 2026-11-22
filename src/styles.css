@@ -229,7 +229,7 @@ body.menu-open .mmenu { clip-path: inset(0 0 0 0); visibility: visible; }
 .journey { position: relative; background: var(--bg-dark); color: #fff; }
 .journey__pin { position: relative; height: 100vh; overflow: hidden; }
 .journey__head { position: absolute; top: 88px; left: var(--gutter); right: var(--gutter); display: flex; align-items: center; justify-content: space-between; gap: 24px; z-index: 3; }
-.journey__crumb { font: 600 9.5px/1 var(--f-body); letter-spacing: .2em; color: rgba(255,255,255,.55); }
+.journey__crumb { min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font: 600 9.5px/1 var(--f-body); letter-spacing: .2em; color: rgba(255,255,255,.55); }
 .journey__bar { flex: 0 0 min(320px, 40vw); height: 2px; background: rgba(255,255,255,.12); border-radius: 2px; overflow: hidden; }
 .journey__bar i { display: block; height: 100%; width: 100%; background: #fff; transform: scaleX(0); transform-origin: left; }
 .journey__track { position: absolute; top: 0; left: 0; height: 100%; width: max-content; display: flex; align-items: center; gap: 6vw; padding: 0 var(--gutter); will-change: transform; }

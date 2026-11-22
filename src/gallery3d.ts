@@ -22,8 +22,8 @@ const vertex = /* glsl */`
     wp.z += -nx * ax * uViewW * 0.22 * uBend;
     wp.y += nx * nx * nx * uViewH * 0.07 * uBend;
     // velocity wave
-    wp.y += sin(uv.x * PI) * uVelocity * 26.0;
-    wp.z -= abs(uVelocity) * sin(uv.x * PI) * 60.0;
+    wp.y += sin(uv.x * PI) * uVelocity * 16.0;
+    wp.z -= abs(uVelocity) * sin(uv.x * PI) * 38.0;
     vShade = clamp(1.0 - ax * 0.12, 0.75, 1.0);
     gl_Position = projectionMatrix * viewMatrix * wp;
   }
@@ -37,18 +37,19 @@ const fragment = /* glsl */`
   uniform float uHover;
   uniform float uRadius;
   uniform float uLoaded;
+  uniform vec2 uFocus;
   varying vec2 vUv;
   varying float vShade;
   vec2 cover(vec2 uv) {
     float rp = uPlaneRes.x / uPlaneRes.y;
     float ri = uImgRes.x / uImgRes.y;
     vec2 s = rp > ri ? vec2(1.0, ri / rp) : vec2(rp / ri, 1.0);
-    return (uv - 0.5) * s + 0.5;
+    return (uv - 0.5) * s + 0.5 + (uFocus - 0.5) * (1.0 - s);
   }
   void main() {
     vec2 uv = cover(vUv);
     uv = (uv - 0.5) * (1.0 - 0.07 * uHover) + 0.5;
-    float shift = uVelocity * 0.018;
+    float shift = uVelocity * 0.011;
     vec3 col;
     col.r = texture2D(uTex, uv + vec2(shift, 0.0)).r;
     col.g = texture2D(uTex, uv).g;
@@ -75,7 +76,7 @@ export interface Ribbon { setScroll(px: number): void; readonly total: number; s
 type Uniforms = {
   uTex: { value: Texture | null }; uImgRes: { value: Vector2 }; uPlaneRes: { value: Vector2 };
   uVelocity: { value: number }; uHover: { value: number }; uRadius: { value: number }; uLoaded: { value: number };
-  uViewW: { value: number }; uViewH: { value: number }; uBend: { value: number };
+  uViewW: { value: number }; uViewH: { value: number }; uBend: { value: number }; uFocus: { value: Vector2 };
 };
 type Card = Mesh<PlaneGeometry, ShaderMaterial> & { userData: { index: number; hover: number } };
 
@@ -103,6 +104,7 @@ export function initRibbon({ canvas, items, onActive, onOpen, onHover }: RibbonO
       uTex: { value: null }, uImgRes: { value: new Vector2(16, 10) }, uPlaneRes: { value: new Vector2(cardW, cardH) },
       uVelocity: { value: 0 }, uHover: { value: 0 }, uRadius: { value: 10 }, uLoaded: { value: 0 },
       uViewW: { value: 1 }, uViewH: { value: 1 }, uBend: { value: 1 },
+      uFocus: { value: new Vector2(item.focus?.[0] ?? 0.5, 1 - (item.focus?.[1] ?? 0.5)) },
     };
     const material = new ShaderMaterial({ vertexShader: vertex, fragmentShader: fragment, uniforms, transparent: true });
     const mesh = new Mesh(geometry, material) as Card;
@@ -175,7 +177,7 @@ export function initRibbon({ canvas, items, onActive, onOpen, onHover }: RibbonO
     state.target = state.scrollBase + state.drag;
     const prev = state.current;
     state.current += (state.target - state.current) * 0.075;
-    const v = Math.max(-1.6, Math.min(1.6, (state.current - prev) / 30));
+    const v = Math.max(-1.1, Math.min(1.1, (state.current - prev) / 40));
     state.velocity += (v - state.velocity) * 0.15;
 
     let best = 0, bestD = Infinity;

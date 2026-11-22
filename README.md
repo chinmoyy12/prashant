@@ -22,7 +22,8 @@ npm run dev        # dev server with live reload → http://localhost:5173
 ```
 Other commands:
 ```bash
-npm run build      # type-check + production build into dist/
+npm run check      # photo check: no repeats, no missing files
+npm run build      # photo check + type-check + production build into dist/
 npm run preview    # serve the production build → http://localhost:4173
 ```
 `npm run dev` also prints a **Network** address (e.g. `http://192.168.x.x:5173`). Open it on your phone on the same Wi-Fi to test mobile.
@@ -37,7 +38,9 @@ The `dist/` folder also works on Netlify, Vercel or Cloudflare Pages (build comm
 ## Photos
 - `public/photos/work/` holds Prasant's photos (2000px), with `public/photos/work/sm/` (1000px) used in the 3D galleries. Location and camera metadata were stripped.
 - To add or change gallery photos, drop both sizes in those folders and edit `src/content.ts`. Journey, Featured and About images are set in `index.html`.
-- The **Street** and **Nature** chapters show a big chapter number until photos are added. Swap the `<div class="jpanel__num">` for a `<figure class="jpanel__photo">` like the other chapters.
+- The **Nature** chapter shows a big chapter number until a nature photo is added. Swap its `<div class="jpanel__num">` for a `<figure class="jpanel__photo">` like the other chapters.
+- **Each photo may appear only once.** `npm run check` (also run before every build) fails if a photo repeats or a file is missing.
+- `focus` in `src/content.ts` sets which part of a photo stays in frame when it's cropped into a card.
 - `public/photos/prasant/hero.webp` + `hero-depth.png` drive the 3D hero portrait (cut-out + depth map). `about.jpg` is the spotlight portrait.
 
 ## Project layout
