@@ -395,27 +395,37 @@
   <!-- ============ CONTACT MODAL ============ -->
   <div class="modal" id="contactModal" aria-hidden="true" role="dialog" aria-labelledby="modalTitle">
     <div class="modal__backdrop" data-close></div>
-    <form class="modal__box" id="contactForm" novalidate>
+    <form class="modal__box" id="contactForm" name="contact" method="POST" action="/" data-netlify="true" netlify-honeypot="company" novalidate>
+      <input type="hidden" name="form-name" value="contact" />
+      <p class="modal__trap" aria-hidden="true"><label>Company<input name="company" tabindex="-1" autocomplete="off" /></label></p>
       <button type="button" class="modal__close" data-close aria-label="Close">✕</button>
-      <h3 id="modalTitle">Tell me your story</h3>
-      <p class="modal__note">Your message opens in your email app or WhatsApp — addressed to Prasant.</p>
-      <label>Name<input name="name" type="text" autocomplete="name" required /></label>
-      <label>Email<input name="email" type="email" autocomplete="email" required /></label>
-      <label>What do you need?
-        <select name="topic">
-          <option>Portrait session</option>
-          <option>Concert / event coverage</option>
-          <option>Street &amp; story series</option>
-          <option>Creative vintage look</option>
-          <option>Nature &amp; travel</option>
-          <option>Something else</option>
-        </select>
-      </label>
-      <label>Message<textarea name="message" rows="4" required></textarea></label>
-      <p class="modal__error" id="formError" role="alert"></p>
-      <div class="modal__actions">
-        <button type="submit" class="btn btn--dark" data-via="email">Send via email</button>
-        <button type="submit" class="btn btn--outline" data-via="whatsapp">Send via WhatsApp</button>
+      <div class="modal__form" id="contactFields">
+        <h3 id="modalTitle">Tell me your story</h3>
+        <p class="modal__note">Your message goes straight to Prasant's inbox. He usually replies within a day or two.</p>
+        <label>Name<input name="name" type="text" autocomplete="name" maxlength="100" required /></label>
+        <label>Email<input name="email" type="email" autocomplete="email" maxlength="200" required /></label>
+        <label>Phone / WhatsApp <span class="modal__optional">(optional)</span><input name="phone" type="tel" autocomplete="tel" maxlength="30" /></label>
+        <label>What do you need?
+          <select name="topic">
+            <option>Portrait session</option>
+            <option>Concert / event coverage</option>
+            <option>Street &amp; story series</option>
+            <option>Creative vintage look</option>
+            <option>Nature &amp; travel</option>
+            <option>Something else</option>
+          </select>
+        </label>
+        <label>Message<textarea name="message" rows="4" maxlength="3000" required></textarea></label>
+        <p class="modal__error" id="formError" role="alert"></p>
+        <div class="modal__actions">
+          <button type="submit" class="btn btn--dark" data-via="send" id="sendBtn">Send message</button>
+          <button type="submit" class="btn btn--outline" data-via="whatsapp">Send via WhatsApp</button>
+        </div>
+      </div>
+      <div class="modal__done" id="contactDone" hidden>
+        <h3>Message sent</h3>
+        <p class="modal__note" id="contactDoneText">Thank you — Prasant has your message and will get back to you soon.</p>
+        <div class="modal__actions"><button type="button" class="btn btn--dark" data-close>Close</button></div>
       </div>
     </form>
   </div>

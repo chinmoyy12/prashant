@@ -4,7 +4,7 @@ import { SplitText } from 'gsap/SplitText';
 import Lenis from 'lenis';
 import 'lenis/dist/lenis.css';
 import './styles.css';
-import { esc, imgTag, loadContent, objectPosition, resolveUrl, type PhotoItem } from './content';
+import { API_BASE, esc, imgTag, loadContent, objectPosition, resolveUrl, type PhotoItem } from './content';
 import { initSwirl } from './swirl';
 import type { Ribbon } from './gallery3d';
 import type { Hero3D } from './hero3d';
@@ -648,6 +648,9 @@ const form = $<HTMLFormElement>('#contactForm');
 const formError = $('#formError');
 const field = (name: string) => form.elements.namedItem(name) as HTMLInputElement;
 function openModal() {
+  // fresh form each time it opens after a successful send
+  if (!$('#contactDone').hidden) { form.reset(); $('#contactDone').hidden = true; $('#contactFields').hidden = false; }
+  formError.textContent = '';
   modal.classList.add('is-open');
   modal.setAttribute('aria-hidden', 'false');
   lenis.stop();
@@ -660,22 +663,50 @@ function closeModal() {
 }
 $('#openContact').addEventListener('click', openModal);
 $$('[data-close]', modal).forEach((b) => b.addEventListener('click', closeModal));
-let via = 'email';
+let via = 'send';
 $$('[data-via]', form).forEach((b) => b.addEventListener('click', () => { via = b.dataset.via ?? 'email'; }));
-form.addEventListener('submit', (e) => {
+const sendBtn = $<HTMLButtonElement>('#sendBtn');
+/** Netlify Forms: the submission is stored on Netlify and emailed to Prasant. */
+async function sendToInbox(data: FormData): Promise<void> {
+  const body = new URLSearchParams();
+  data.forEach((v, k) => body.append(k, String(v)));
+  const sameSite = !API_BASE || location.origin === API_BASE;
+  if (sameSite) {
+    const res = await fetch('/', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: body.toString() });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  } else {
+    // copies hosted elsewhere (GitHub Pages) post to the Netlify site; the reply is opaque cross-origin
+    await fetch(`${API_BASE}/`, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: body.toString() });
+  }
+}
+form.addEventListener('submit', async (e) => {
   e.preventDefault();
   const name = field('name').value.trim();
   const email = field('email').value.trim();
+  const phone = field('phone').value.trim();
   const topic = field('topic').value;
   const message = field('message').value.trim();
   if (!name || !message) { formError.textContent = 'Please add your name and a short message.'; return; }
-  if (via === 'email' && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { formError.textContent = 'Please enter a valid email address.'; return; }
+  if (via === 'send' && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { formError.textContent = 'Please enter a valid email address so Prasant can reply.'; return; }
   formError.textContent = '';
-  const body = `Hi Prasant,\n\n${message}\n\n— ${name}${email ? ` (${email})` : ''}`;
   if (via === 'whatsapp') {
-    window.open(`https://wa.me/${PHONE_INTL}?text=${encodeURIComponent(`[${topic}] ${body}`)}`, '_blank', 'noopener');
-  } else {
-    window.location.href = `mailto:${EMAIL}?subject=${encodeURIComponent(`${topic} — enquiry from ${name}`)}&body=${encodeURIComponent(body)}`;
+    const text = `Hi Prasant,\n\n[${topic}] ${message}\n\n— ${name}${email ? ` (${email})` : ''}${phone ? ` · ${phone}` : ''}`;
+    window.open(`https://wa.me/${PHONE_INTL}?text=${encodeURIComponent(text)}`, '_blank', 'noopener');
+    return;
+  }
+  if (field('company').value) { $('#contactFields').hidden = true; $('#contactDone').hidden = false; return; } // bot trap
+  sendBtn.classList.add('is-loading');
+  sendBtn.textContent = 'Sending…';
+  try {
+    await sendToInbox(new FormData(form));
+    $('#contactDoneText').textContent = `Thank you, ${name.split(' ')[0]} — Prasant has your message and will reply to ${email} soon.`;
+    $('#contactFields').hidden = true;
+    $('#contactDone').hidden = false;
+  } catch {
+    formError.textContent = `Your message could not be sent right now. Please email ${EMAIL} or use WhatsApp.`;
+  } finally {
+    sendBtn.classList.remove('is-loading');
+    sendBtn.textContent = 'Send message';
   }
 });
 document.addEventListener('keydown', (e) => {
