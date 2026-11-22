@@ -7,8 +7,7 @@
     "dev": "vite --host",
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview --host",
-    "typecheck": "tsc --noEmit",
-    "placeholders": "node tools/render-placeholders.cjs"
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "gsap": "^3.15.1",

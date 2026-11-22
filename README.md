@@ -34,23 +34,22 @@ npm run preview    # serve the production build → http://localhost:4173
 
 The `dist/` folder also works on Netlify, Vercel or Cloudflare Pages (build command `npm run build`, output `dist`).
 
-## Put in your own photos
-The images in `public/photos/` are **generated placeholders**.
-- **Easiest:** save your photos over the same file names (e.g. your best street shot as `street-rain.jpg`).
-- **Or** add new files to `public/photos/`, then edit the titles and paths in `src/content.ts` (Collections ribbon + Frames ring) and the `<img>` tags in `index.html` (Journey, Featured, About).
-- **Hero portrait:** `public/photos/profile.png`. Use a transparent-background PNG cut-out, roughly square, with head and shoulders at the bottom.
-- Landscape photos around 1600×1067 under ~500 KB each work best.
+## Photos
+- `public/photos/work/` holds Prasant's photos (2000px), with `public/photos/work/sm/` (1000px) used in the 3D galleries. Location and camera metadata were stripped.
+- To add or change gallery photos, drop both sizes in those folders and edit `src/content.ts`. Journey, Featured and About images are set in `index.html`.
+- The **Street** and **Nature** chapters show a big chapter number until photos are added. Swap the `<div class="jpanel__num">` for a `<figure class="jpanel__photo">` like the other chapters.
+- `public/photos/prasant/hero.webp` + `hero-depth.png` drive the 3D hero portrait (cut-out + depth map). `about.jpg` is the spotlight portrait.
 
 ## Project layout
 ```
 index.html            page markup and text content
 src/main.ts           all scroll animations and interactions
 src/gallery3d.ts      WebGL curved ribbon (Three.js + shaders)
+src/hero3d.ts         3D portrait: depth mesh, relighting, colour reveal, particles
 src/swirl.ts          swirling night-sky canvas
 src/content.ts        gallery photos and titles  ← edit this
 src/styles.css        styles
-public/photos/        images                     ← replace these
-tools/                placeholder image generator (optional)
+public/photos/        images
 ```
 
 ## Contact details

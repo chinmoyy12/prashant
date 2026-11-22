@@ -20,7 +20,7 @@ const vertex = /* glsl */`
     float ax = abs(nx);
     // S-shaped ribbon: left side swings toward the camera & down, right side away & up
     wp.z += -nx * ax * uViewW * 0.22 * uBend;
-    wp.y += nx * nx * nx * uViewH * 0.12 * uBend;
+    wp.y += nx * nx * nx * uViewH * 0.07 * uBend;
     // velocity wave
     wp.y += sin(uv.x * PI) * uVelocity * 26.0;
     wp.z -= abs(uVelocity) * sin(uv.x * PI) * 60.0;
@@ -108,7 +108,7 @@ export function initRibbon({ canvas, items, onActive, onOpen, onHover }: RibbonO
     const mesh = new Mesh(geometry, material) as Card;
     mesh.userData = { index: i, hover: 0 };
     scene.add(mesh);
-    loader.load(item.src, (tex) => {
+    loader.load(item.thumb, (tex) => {
       tex.colorSpace = SRGBColorSpace;
       tex.minFilter = LinearFilter; tex.generateMipmaps = false;
       uniforms.uTex.value = tex;
@@ -127,9 +127,11 @@ export function initRibbon({ canvas, items, onActive, onOpen, onHover }: RibbonO
     camera.position.set(0, 0, dist);
     camera.fov = 2 * Math.atan(H / 2 / dist) * (180 / Math.PI);
     camera.aspect = W / H; camera.updateProjectionMatrix();
-    cardW = Math.min(Math.max(W * (W < 700 ? 0.62 : 0.27), 220), 480);
-    cardH = cardW * 0.66;
-    gap = cardW * 0.1;
+    // portrait cards — concert photos are vertical
+    cardH = W < 700 ? Math.min(H * 0.44, (W * 0.6) / 0.68) : Math.min(Math.max(H * 0.44, 260), 480);
+    cardW = cardH * 0.68;
+    gap = cardW * 0.14;
+    canvas.parentElement?.style.setProperty('--ribbon-h', `${cardH}px`);
     total = items.length * (cardW + gap);
     state.bend = W < 700 ? 0.45 : 1;
     meshes.forEach((m) => {

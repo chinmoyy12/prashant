@@ -1,13 +1,15 @@
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { SplitText } from 'gsap/SplitText';
 import Lenis from 'lenis';
 import 'lenis/dist/lenis.css';
 import './styles.css';
-import { COLLECTIONS, FRAMES } from './content';
+import { COLLECTIONS, FRAMES, type Photo } from './content';
 import { initSwirl } from './swirl';
 import type { Ribbon } from './gallery3d';
+import type { Hero3D } from './hero3d';
 
-gsap.registerPlugin(ScrollTrigger);
+gsap.registerPlugin(ScrollTrigger, SplitText);
 ScrollTrigger.config({ ignoreMobileResize: true });
 
 /* ---------- helpers ---------- */
@@ -20,6 +22,8 @@ const $$ = <T extends Element = HTMLElement>(s: string, c: ParentNode = document
 const finePointer = matchMedia('(hover: hover) and (pointer: fine)').matches;
 const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const pad = (n: number) => String(n).padStart(2, '0');
+const visibility = (el: Element, on: () => void, off: () => void) =>
+  new IntersectionObserver(([en]) => (en.isIntersecting ? on() : off()), { rootMargin: '100px' }).observe(el);
 
 if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
 window.scrollTo(0, 0);
@@ -101,6 +105,33 @@ if (finePointer) {
 }
 
 /* =========================================================
+   Film grain (generated noise tile, no extra request)
+   ========================================================= */
+(() => {
+  const c = document.createElement('canvas'); c.width = c.height = 180;
+  const g = c.getContext('2d'); if (!g) return;
+  const img = g.createImageData(180, 180);
+  for (let i = 0; i < img.data.length; i += 4) { const v = Math.random() * 255; img.data[i] = img.data[i + 1] = img.data[i + 2] = v; img.data[i + 3] = 255; }
+  g.putImageData(img, 0, 0);
+  const el = document.createElement('div'); el.className = 'grain'; el.setAttribute('aria-hidden', 'true');
+  el.style.backgroundImage = `url(${c.toDataURL('image/png')})`;
+  document.body.appendChild(el);
+})();
+
+/* ---------- magnetic buttons ---------- */
+if (finePointer && !reduced) {
+  $$('.btn, .pillbtn, .acc__cta, .nav__icons a').forEach((el) => {
+    const mx = gsap.quickTo(el, 'x', { duration: 0.6, ease: 'elastic.out(1, 0.4)' });
+    const my = gsap.quickTo(el, 'y', { duration: 0.6, ease: 'elastic.out(1, 0.4)' });
+    el.addEventListener('pointermove', (e) => {
+      const r = el.getBoundingClientRect();
+      mx((e.clientX - r.left - r.width / 2) * 0.35); my((e.clientY - r.top - r.height / 2) * 0.45);
+    });
+    el.addEventListener('pointerleave', () => { mx(0); my(0); });
+  });
+}
+
+/* =========================================================
    Preloader
    ========================================================= */
 function buildLoaderPath(): { x: number; y: number } {
@@ -166,12 +197,40 @@ function runLoader(): Promise<void> {
    Hero
    ========================================================= */
 const portrait = $('.hero__portrait');
+const heroEl = $('.hero');
 gsap.set(portrait, { xPercent: -50, x: 0 });
 gsap.set('.hero__word', { yPercent: 115 });
 gsap.set('.hero__portrait img', { yPercent: 40, opacity: 0, filter: 'blur(16px) grayscale(1)' });
 gsap.set(['.hero__left', '.hero__right', '.hero__scroll'], { opacity: 0, y: 20 });
 
+// 3D portrait loads while the preloader runs; falls back to the flat cut-out
+let hero3d: Hero3D | null = null;
+const heroScatter = { intro: 1, scroll: 0 };
+const applyScatter = () => hero3d?.setScatter(Math.max(heroScatter.intro, heroScatter.scroll));
+const hero3dReady: Promise<void> = (async () => {
+  try {
+    const { initHero3D } = await import('./hero3d');
+    hero3d = await initHero3D({
+      canvas: $<HTMLCanvasElement>('#heroCanvas'),
+      colorUrl: 'photos/prasant/hero.webp',
+      depthUrl: 'photos/prasant/hero-depth.png',
+      pointerArea: heroEl,
+    });
+  } catch (err) {
+    console.warn('3D portrait unavailable, using the flat image.', err);
+    hero3d = null;
+  }
+  if (!hero3d) { $('#heroCanvas').hidden = true; return; }
+  const h = hero3d;
+  heroEl.classList.add('has-3d');
+  applyScatter();
+  visibility(heroEl, () => h.start(), () => h.stop());
+})();
+
 function heroIntro() {
+  if (hero3d) {
+    gsap.to(heroScatter, { intro: 0, duration: reduced ? 0.01 : 2.6, ease: 'power3.inOut', onUpdate: applyScatter, delay: 0.15 });
+  }
   gsap.timeline()
     .to('.hero__word', { yPercent: 0, duration: 1.3, ease: 'expo.out', stagger: 0.12 })
     .to('.hero__portrait img', { yPercent: 0, opacity: 1, filter: 'blur(0px) grayscale(1)', duration: 1.6, ease: 'expo.out' }, '-=1.05')
@@ -190,6 +249,12 @@ if (finePointer && !reduced) {
 }
 gsap.to('.hero__title', { yPercent: -18, opacity: 0.35, ease: 'none', scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true } });
 gsap.to(portrait, { yPercent: 12, scale: 1.04, ease: 'none', scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true } });
+// scrolling away dissolves the 3D figure into particles that drift up into the night sky
+ScrollTrigger.create({
+  trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true,
+  onUpdate: (st) => { heroScatter.scroll = Math.min(1, st.progress * 1.25); applyScatter(); },
+});
+gsap.to('#heroCanvas', { yPercent: -10, ease: 'none', scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true } });
 
 /* =========================================================
    About — swirl background + expanding card
@@ -222,8 +287,6 @@ gsap.timeline({
 gsap.fromTo('.about__title', { yPercent: 60 }, { yPercent: 0, ease: 'none', scrollTrigger: { trigger: '.about', start: 'top bottom', end: 'top top', scrub: true } });
 gsap.fromTo('#swirlBg, #swirlFx', { scale: 1.15 }, { scale: 1, ease: 'none', scrollTrigger: { trigger: '.about', start: 'top bottom', end: 'top top', scrub: true } });
 
-const visibility = (el: Element, on: () => void, off: () => void) =>
-  new IntersectionObserver(([en]) => (en.isIntersecting ? on() : off()), { rootMargin: '100px' }).observe(el);
 visibility($('.about__pin'), () => swirl.start(), () => swirl.stop());
 
 /* =========================================================
@@ -269,7 +332,10 @@ panels.forEach((panel, idx) => {
     .to(title, { '--split': 0, duration: 0.33 })
     .to(title, { '--split': 1, ease: 'none', duration: 0.25 });
   gsap.fromTo(ghost, { xPercent: 18 }, { xPercent: -28, ease: 'none', scrollTrigger: inPanel });
+  const num = panel.querySelector<HTMLElement>('.jpanel__num');
+  if (num) gsap.fromTo(num, { xPercent: 30, opacity: 0.2 }, { xPercent: -30, opacity: 1, ease: 'none', scrollTrigger: inPanel });
   if (photo) {
+    gsap.fromTo(photo, { clipPath: 'inset(12% 12% 12% 12% round 14px)' }, { clipPath: 'inset(0% 0% 0% 0% round 14px)', ease: 'none', scrollTrigger: { ...inPanel, end: 'center center' } });
     if (innerWidth > 860) gsap.fromTo(photo, { rotateY: -32, transformPerspective: 900 }, { rotateY: 14, ease: 'none', scrollTrigger: inPanel });
     gsap.fromTo($('img', photo), { scale: 1.3 }, { scale: 1.05, ease: 'none', scrollTrigger: inPanel });
   }
@@ -314,7 +380,7 @@ function setRibbonCaption(i: number) {
 }
 function buildRibbonFallback() {
   const fb = $('#ribbonFallback');
-  fb.innerHTML = COLLECTIONS.map((c) => `<figure data-lightbox="${c.src}" data-title="${c.title}"><img src="${c.src}" alt="${c.title}" loading="lazy" /></figure>`).join('');
+  fb.innerHTML = COLLECTIONS.map((c) => `<figure data-lightbox="${c.src}" data-title="${c.title}"><img src="${c.thumb}" alt="${c.title}" loading="lazy" /></figure>`).join('');
   fb.hidden = false;
   $<HTMLCanvasElement>('#ribbon').hidden = true;
   setRibbonCaption(0);
@@ -334,7 +400,7 @@ async function setupRibbon() {
       canvas: $<HTMLCanvasElement>('#ribbon'),
       items: COLLECTIONS,
       onActive: setRibbonCaption,
-      onOpen: (i) => openLightbox(COLLECTIONS[i].src, COLLECTIONS[i].title),
+      onOpen: (i) => openLightbox(COLLECTIONS, i),
       onHover: (over) => setCursorLabel(over ? 'VIEW' : 'DRAG'),
     });
   } catch (err) {
@@ -359,7 +425,7 @@ const ring = $('#framesRing');
 const list = $('#framesList');
 const N = FRAMES.length;
 const STEP = 360 / N;
-ring.innerHTML = FRAMES.map((f, i) => `<div class="frame-card" data-i="${i}"><img src="${f.src}" alt="${f.title}" loading="lazy" draggable="false" /><span>${f.title}</span></div>`).join('');
+ring.innerHTML = FRAMES.map((f, i) => `<div class="frame-card" data-i="${i}"><img src="${f.thumb}" alt="${f.title}" loading="lazy" draggable="false" /><span>${f.title}</span></div>`).join('');
 list.innerHTML = FRAMES.map((f, i) => `<li data-i="${i}">${f.title}</li>`).join('');
 const cards = $$('.frame-card', ring);
 const listItems = $$('li', list);
@@ -385,8 +451,9 @@ function renderRing() {
   }
 }
 function layoutRing() {
-  const cw = innerWidth < 760 ? Math.min(innerWidth * 0.72, 340) : Math.max(240, Math.min(innerWidth * 0.26, 400));
-  const ch = cw * 0.62;
+  // portrait cards (concert photos are vertical)
+  const ch = innerWidth < 760 ? Math.min(innerHeight * 0.34, innerWidth * 0.62) : Math.max(220, Math.min(innerHeight * 0.36, 330));
+  const cw = ch * 0.7;
   ring.style.setProperty('--cw', `${cw}px`);
   ring.style.setProperty('--ch', `${ch}px`);
   ringState.R = ch / 2 / Math.tan(Math.PI / N) + ch * 0.14;
@@ -434,8 +501,7 @@ framesPin.addEventListener('pointerenter', () => setCursorLabel('DRAG'));
 framesPin.addEventListener('pointerleave', () => setCursorLabel(''));
 cards.forEach((c) => c.addEventListener('click', () => {
   if (ringDragged) return;
-  const f = FRAMES[Number(c.dataset.i)];
-  openLightbox(f.src, f.title);
+  openLightbox(FRAMES, Number(c.dataset.i));
 }));
 
 /* =========================================================
@@ -461,7 +527,6 @@ accItems.forEach((item) => {
     else collapse(panel);
   });
 });
-gsap.from('.services__title, .services__sub', { opacity: 0, y: 40, filter: 'blur(8px)', stagger: 0.1, duration: 1, ease: 'power3.out', scrollTrigger: { trigger: '.services', start: 'top 75%' } });
 gsap.from('.acc__item', { opacity: 0, y: 40, stagger: 0.08, duration: 0.9, ease: 'power3.out', scrollTrigger: { trigger: '.acc', start: 'top 85%' } });
 
 /* =========================================================
@@ -474,7 +539,7 @@ $('.talk').addEventListener('pointermove', (e) => {
   talkTitle.style.setProperty('--my', `${(((e.clientY - r.top) / r.height) * 100).toFixed(1)}%`);
 });
 gsap.fromTo('.talk__title', { yPercent: 35, scale: 0.88, opacity: 0.2 }, { yPercent: 0, scale: 1, opacity: 1, ease: 'none', scrollTrigger: { trigger: '.talk', start: 'top bottom', end: 'top 15%', scrub: true } });
-gsap.from('.talk__lead, .talk__links > *, .talk__direct', { opacity: 0, y: 20, stagger: 0.06, duration: 0.8, ease: 'power3.out', scrollTrigger: { trigger: '.talk', start: 'top 45%' } });
+gsap.from('.talk__links > *, .talk__direct', { opacity: 0, y: 20, stagger: 0.06, duration: 0.8, ease: 'power3.out', scrollTrigger: { trigger: '.talk', start: 'top 45%' } });
 
 /* =========================================================
    Lightbox
@@ -482,25 +547,55 @@ gsap.from('.talk__lead, .talk__links > *, .talk__direct', { opacity: 0, y: 20, s
 const lb = $('#lightbox');
 const lbImg = $<HTMLImageElement>('#lightboxImg');
 const lbCap = $('#lightboxCap');
+const lbCount = $('#lightboxCount');
 const modal = $('#contactModal');
-function openLightbox(src: string, title?: string) {
-  lbImg.src = src;
-  lbImg.alt = title ?? '';
-  lbCap.textContent = title ?? '';
+type Shot = Pick<Photo, 'src' | 'title'>;
+let lbSet: Shot[] = [];
+let lbIndex = 0;
+function showShot(dir = 0) {
+  const shot = lbSet[lbIndex];
+  lbCap.textContent = shot.title;
+  lbCount.textContent = lbSet.length > 1 ? `${pad(lbIndex + 1)} / ${pad(lbSet.length)}` : '';
+  gsap.fromTo(lbImg, { opacity: 0, x: dir * 40 }, { opacity: 1, x: 0, duration: 0.5, ease: 'power3.out' });
+  lbImg.src = shot.src;
+  lbImg.alt = shot.title;
+  // warm the cache for the neighbours
+  [1, -1].forEach((d) => { const n = lbSet[(lbIndex + d + lbSet.length) % lbSet.length]; if (n) new Image().src = n.src; });
+}
+function openLightbox(set: Shot[], index: number) {
+  lbSet = set; lbIndex = index;
+  $('#lightboxPrev').hidden = $('#lightboxNext').hidden = set.length < 2;
+  showShot();
   lb.classList.add('is-open');
   lb.setAttribute('aria-hidden', 'false');
   lenis.stop();
   setCursorLabel('');
+}
+function stepLightbox(d: number) {
+  if (lbSet.length < 2) return;
+  lbIndex = (lbIndex + d + lbSet.length) % lbSet.length;
+  showShot(d);
 }
 function closeLightbox() {
   lb.classList.remove('is-open');
   lb.setAttribute('aria-hidden', 'true');
   if (!modal.classList.contains('is-open')) lenis.start();
 }
-lb.addEventListener('click', closeLightbox);
+lb.addEventListener('click', (e) => {
+  const t = e.target as HTMLElement;
+  if (t.id === 'lightboxPrev') stepLightbox(-1);
+  else if (t.id === 'lightboxNext') stepLightbox(1);
+  else if (t.id !== 'lightboxImg') closeLightbox();
+});
+let touchX = 0;
+lb.addEventListener('touchstart', (e) => { touchX = e.touches[0].clientX; }, { passive: true });
+lb.addEventListener('touchend', (e) => { const dx = e.changedTouches[0].clientX - touchX; if (Math.abs(dx) > 50) stepLightbox(dx < 0 ? 1 : -1); });
 document.addEventListener('click', (e) => {
   const el = (e.target as Element | null)?.closest?.<HTMLElement>('[data-lightbox]');
-  if (el?.dataset.lightbox) openLightbox(el.dataset.lightbox, el.dataset.title);
+  if (!el?.dataset.lightbox) return;
+  // browse every photo in the same section
+  const group = $$('[data-lightbox]', el.closest('section') ?? document);
+  openLightbox(group.map((g) => ({ src: g.dataset.lightbox ?? '', title: g.dataset.title ?? '' })), Math.max(0, group.indexOf(el)));
 });
 
 /* =========================================================
@@ -543,6 +638,7 @@ form.addEventListener('submit', (e) => {
   }
 });
 document.addEventListener('keydown', (e) => {
+  if (lb.classList.contains('is-open') && (e.key === 'ArrowRight' || e.key === 'ArrowLeft')) { stepLightbox(e.key === 'ArrowRight' ? 1 : -1); return; }
   if (e.key !== 'Escape') return;
   if (lb.classList.contains('is-open')) closeLightbox();
   if (modal.classList.contains('is-open')) closeModal();
@@ -566,8 +662,22 @@ const navLinks = $$<HTMLAnchorElement>('.nav__links a');
    Boot
    ========================================================= */
 const fontsReady = Promise.race([document.fonts.ready, new Promise((r) => setTimeout(r, 2500))]);
+function splitReveals() {
+  if (reduced) return;
+  SplitText.create('.services__title', {
+    type: 'chars', autoSplit: false,
+    onSplit: (self) => gsap.from(self.chars, { yPercent: 110, opacity: 0, rotate: 6, stagger: 0.025, duration: 0.9, ease: 'expo.out', scrollTrigger: { trigger: '.services', start: 'top 70%' } }),
+  });
+  SplitText.create('.talk__lead, .services__sub, .jpanel--intro .jpanel__desc', {
+    type: 'lines', mask: 'lines', linesClass: 'split-line', autoSplit: true,
+    onSplit: (self) => gsap.from(self.lines, { yPercent: 105, duration: 1, stagger: 0.08, ease: 'expo.out', scrollTrigger: { trigger: self.elements[0], start: 'top 88%' } }),
+  });
+}
+
 void fontsReady.then(async () => {
+  splitReveals();
   ScrollTrigger.refresh();
+  await Promise.race([hero3dReady, new Promise((r) => setTimeout(r, 4000))]);
   await runLoader();
   document.body.classList.remove('is-loading');
   $('#loader').style.display = 'none';
