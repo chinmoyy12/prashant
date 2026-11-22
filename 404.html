@@ -9,14 +9,14 @@
   <meta property="og:title" content="Prasant Shil Sarma — Photographer" />
   <meta property="og:description" content="Street · Portraits · Creative Vintage · Nature · Concerts. Every frame holds a unique story." />
   <meta property="og:type" content="website" />
-  <meta property="og:image" content="photos/about-beam.jpg" />
+  <meta property="og:image" content="photos/prasant/about.jpg" />
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230b0b0c'/%3E%3Ccircle cx='32' cy='32' r='13' fill='none' stroke='%23fff' stroke-width='4'/%3E%3Ccircle cx='32' cy='32' r='4' fill='%23fff'/%3E%3C/svg%3E" />
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
-  <script type="module" crossorigin src="./assets/index-Ba8CmWHk.js"></script>
-  <link rel="stylesheet" crossorigin href="./assets/index-qn2bkM2I.css">
+  <script type="module" crossorigin src="./assets/index-Cafr86Vx.js"></script>
+  <link rel="stylesheet" crossorigin href="./assets/index-DWUpzX4s.css">
 </head>
 <body class="is-loading">
 
@@ -94,11 +94,13 @@
       </div>
 
       <div class="hero__portrait">
-        <img src="photos/profile.png" alt="Portrait of Prasant Shil Sarma" width="1200" height="1200" fetchpriority="high" />
+        <img class="hero__fallback" src="photos/prasant/hero.webp" alt="Prasant Shil Sarma" width="1000" height="1403" fetchpriority="high" />
       </div>
+      <canvas class="hero__canvas" id="heroCanvas" aria-hidden="true"></canvas>
 
       <div class="hero__left">
-        <p class="hero__tag">PHOTOGRAPHER · STILL LEARNING</p>
+        <p class="hero__tag">PRASANT SHIL SARMA<br />PHOTOGRAPHER · STILL LEARNING</p>
+        <p class="hero__hint">MOVE YOUR CURSOR TO DEVELOP THE COLOUR</p>
         <span class="hero__arrow" aria-hidden="true">
           <svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 8v10H8" fill="none" stroke="currentColor" stroke-width="1.4"/></svg>
         </span>
@@ -127,12 +129,12 @@
 
         <div class="about__card" id="aboutCard">
           <div class="about__media">
-            <img src="photos/about-beam.jpg" alt="A photographer standing in a beam of light" loading="lazy" />
+            <img src="photos/prasant/about.jpg" alt="Prasant Shil Sarma with his camera, standing in a beam of light" loading="lazy" />
           </div>
           <div class="about__content">
             <div class="about__top">
               <h3 class="about__headline">Finding the story behind every frame</h3>
-              <span class="about__meta">PHOTOGRAPHER · BASED IN INDIA · OPEN FOR WORK</span>
+              <span class="about__meta">PHOTOGRAPHER · CONCERTS &amp; STORIES · OPEN FOR WORK</span>
             </div>
             <div class="about__bottom">
               <div class="about__text">
@@ -183,7 +185,7 @@
                   <div><dt>LESSON</dt><dd>Patience over perfection</dd></div>
                 </dl>
               </div>
-              <figure class="jpanel__photo" data-lightbox="photos/street-rain.jpg" data-title="Rain Diaries"><img src="photos/street-rain.jpg" alt="Street photograph in the rain" loading="lazy" /></figure>
+              <div class="jpanel__num" aria-hidden="true">01</div>
             </div>
           </article>
 
@@ -200,7 +202,7 @@
                   <div><dt>LESSON</dt><dd>Connection first, camera second</dd></div>
                 </dl>
               </div>
-              <figure class="jpanel__photo" data-lightbox="photos/portrait-rim.jpg" data-title="Golden Edge"><img src="photos/portrait-rim.jpg" alt="Rim-lit portrait" loading="lazy" /></figure>
+              <figure class="jpanel__photo" data-lightbox="photos/work/sez-2453.jpg" data-title="Blue Profile"><img src="photos/work/sm/sez-2453.jpg" alt="Singer in blue light, photographed in profile" loading="lazy" /></figure>
             </div>
           </article>
 
@@ -217,7 +219,7 @@
                   <div><dt>LESSON</dt><dd>Imperfection has character</dd></div>
                 </dl>
               </div>
-              <figure class="jpanel__photo" data-lightbox="photos/vintage-road.jpg" data-title="Faded Roads"><img src="photos/vintage-road.jpg" alt="Vintage toned road photograph" loading="lazy" /></figure>
+              <figure class="jpanel__photo" data-lightbox="photos/work/sez-2532.jpg" data-title="Sepia Stage"><img src="photos/work/sm/sez-2532.jpg" alt="Sepia-toned concert photograph" loading="lazy" /></figure>
             </div>
           </article>
 
@@ -234,7 +236,7 @@
                   <div><dt>LESSON</dt><dd>Slow down and observe</dd></div>
                 </dl>
               </div>
-              <figure class="jpanel__photo" data-lightbox="photos/nature-mountains.jpg" data-title="Layers of Dawn"><img src="photos/nature-mountains.jpg" alt="Misty mountain layers at dawn" loading="lazy" /></figure>
+              <div class="jpanel__num" aria-hidden="true">04</div>
             </div>
           </article>
 
@@ -251,7 +253,7 @@
                   <div><dt>LESSON</dt><dd>Anticipate the peak moment</dd></div>
                 </dl>
               </div>
-              <figure class="jpanel__photo" data-lightbox="photos/concert-beams.jpg" data-title="Stage Lights"><img src="photos/concert-beams.jpg" alt="Concert stage lights and crowd" loading="lazy" /></figure>
+              <figure class="jpanel__photo" data-lightbox="photos/work/sez-2334.jpg" data-title="Under the LED Sky"><img src="photos/work/sm/sez-2334.jpg" alt="Singer on stage in front of a colourful LED wall" loading="lazy" /></figure>
             </div>
           </article>
 
@@ -273,11 +275,11 @@
     <section class="featured" id="featured" data-theme="light">
       <div class="featured__pin">
         <h2 class="featured__title" data-text="FEATURED WORK">FEATURED WORK</h2>
-        <p class="featured__sub">A few frames I keep coming back to</p>
+        <p class="featured__sub">Frames from the front row</p>
         <div class="featured__stage">
-          <figure class="fcard fcard--a" data-lightbox="photos/street-shadows.jpg" data-title="Lines &amp; Shadows"><img src="photos/street-shadows.jpg" alt="Street photograph with strong shadows" loading="lazy" /><figcaption>Lines &amp; Shadows</figcaption></figure>
-          <figure class="fcard fcard--b" data-lightbox="photos/vintage-sea.jpg" data-title="Salt &amp; Film"><img src="photos/vintage-sea.jpg" alt="Vintage toned seaside photograph" loading="lazy" /><figcaption>Salt &amp; Film</figcaption></figure>
-          <figure class="fcard fcard--c" data-lightbox="photos/concert-singer.jpg" data-title="One Voice"><img src="photos/concert-singer.jpg" alt="Singer in a spotlight" loading="lazy" /><figcaption>One Voice</figcaption></figure>
+          <figure class="fcard fcard--a" data-lightbox="photos/work/sez-3623.jpg" data-title="Red Room"><img src="photos/work/sm/sez-3623.jpg" alt="Two singers on a red-lit stage" loading="lazy" /><figcaption>Red Room</figcaption></figure>
+          <figure class="fcard fcard--b" data-lightbox="photos/work/sez-2340.jpg" data-title="Glitch Sky"><img src="photos/work/sm/sez-2340.jpg" alt="Singer with outstretched arm under a glitching LED sky" loading="lazy" /><figcaption>Glitch Sky</figcaption></figure>
+          <figure class="fcard fcard--c" data-lightbox="photos/work/sez-2381.jpg" data-title="Echoes in Red"><img src="photos/work/sm/sez-2381.jpg" alt="Singer dwarfed by giant red screens showing his own image" loading="lazy" /><figcaption>Echoes in Red</figcaption></figure>
         </div>
       </div>
     </section>
@@ -380,8 +382,10 @@
 
   <!-- ============ LIGHTBOX ============ -->
   <div class="lightbox" id="lightbox" aria-hidden="true" role="dialog" aria-label="Photo viewer">
-    <button class="lightbox__close" aria-label="Close">CLOSE ✕</button>
-    <figure><img id="lightboxImg" src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" alt="" /><figcaption id="lightboxCap"></figcaption></figure>
+    <button class="lightbox__close" id="lightboxClose" aria-label="Close">CLOSE ✕</button>
+    <button class="lightbox__nav lightbox__nav--prev" id="lightboxPrev" aria-label="Previous photo">←</button>
+    <button class="lightbox__nav lightbox__nav--next" id="lightboxNext" aria-label="Next photo">→</button>
+    <figure><img id="lightboxImg" src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" alt="" /><figcaption><span id="lightboxCap"></span><span class="lightbox__count" id="lightboxCount"></span></figcaption></figure>
   </div>
 
   <!-- ============ CONTACT MODAL ============ -->
